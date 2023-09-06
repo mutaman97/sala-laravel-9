@@ -1,0 +1,63 @@
+/* @font-face {
+    font-family: 'Tajawal';
+    src: url('subset-Tajawal-Black.woff2') format('woff2'),
+        url('subset-Tajawal-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+} */
+
+@font-face {
+    font-family: 'Tajawal';
+    src: url('subset-Tajawal-Bold.woff2') format('woff2'),
+        url('subset-Tajawal-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* @font-face {
+    font-family: 'Tajawal';
+    src: url('subset-Tajawal-ExtraBold.woff2') format('woff2'),
+        url('subset-Tajawal-ExtraBold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+} */
+
+@font-face {
+    font-family: 'Tajawal';
+    src: url('subset-Tajawal-ExtraLight.woff2') format('woff2'),
+        url('subset-Tajawal-ExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    src: url('subset-Tajawal-Light.woff2') format('woff2'),
+        url('subset-Tajawal-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    src: url('subset-Tajawal-Medium.woff2') format('woff2'),
+        url('subset-Tajawal-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tajawal';
+    src: url('subset-Tajawal-Regular.woff2') format('woff2'),
+        url('subset-Tajawal-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

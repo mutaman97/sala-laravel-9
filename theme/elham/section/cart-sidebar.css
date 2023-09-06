@@ -1,0 +1,48 @@
+#shopping {
+	position: relative;
+	width: 100%;
+	height: 550px;
+	overflow: hidden;
+}
+.shopping-item {
+	position: fixed;
+	left: 0;
+	width: 380px;
+	background: #fff;
+	padding: 20px 20px;
+	-webkit-transition: all 0.3s ease 0s;
+	-moz-transition: all 0.3s ease 0s;
+	transition: all 0.3s ease 0s;
+	-webkit-transform: translateY(10px);
+	-moz-transform: translateY(10px);
+	transform: translateY(10px);
+	-webkit-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.35);
+	z-index: 999999;
+	height: 100%;
+	opacity: 0;
+	visibility: hidden;
+	top: 0;
+}
+.shopping-item.active{
+	transform: translateY(0px);
+	opacity:1;
+	visibility:visible;
+}
+.dropdown-cart-header {
+	border-bottom: 1px solid #cccccc9e;
+	margin-bottom: 25px;
+	padding-bottom: 10px;
+}
+.shopping-item .bottom {
+	text-align: center;
+	bottom: 0;
+	width: 100%;
+}
+
+
+
+
+
+

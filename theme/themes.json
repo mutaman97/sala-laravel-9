@@ -1,0 +1,34 @@
+[
+	
+	{
+		"name":"Resto",
+		"view_path":"theme/resto",
+		"asset_path":"theme/resto"
+	},
+	{
+		"name":"GrShop",
+		"view_path":"theme/grshop",
+		"asset_path":"theme/grshop"
+	},
+	{
+		"name":"Grocery",
+		"view_path":"theme/grocery",
+		"asset_path":"theme/grocery"
+	},
+	{
+		"name":"Rafal",
+		"view_path":"theme/rafal",
+		"asset_path":"theme/rafal"
+	},
+	{
+		"name":"Modesy",
+		"view_path":"theme/modesy",
+		"asset_path":"theme/modesy"
+	},
+	{
+		"name":"Elham",
+		"view_path":"theme/elham",
+		"asset_path":"theme/elham"
+	}
+]
+

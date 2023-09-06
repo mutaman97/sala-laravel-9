@@ -1,0 +1,86 @@
+[
+  {
+    "name": "paypal",
+    "logo": "uploads/gateway/paypal.png",
+    "namespace": "App\\Lib\\Paypal",
+    "phone_required": "0",
+    "currency_name": "USD",
+    "data": {
+      "client_id":"",
+      "client_secret":""
+    },
+    "is_auto": 1
+  },
+  {
+    "name": "stripe",
+    "logo": "uploads/gateway/stripe.png",
+    "namespace": "App\\Lib\\Stripe",
+    "phone_required": "0",
+    "currency_name": "USD",
+    "data": {
+      "publishable_key":"",
+      "secret_key":""
+    },
+    "is_auto": 1
+  },
+  {
+    "name": "paystack",
+    "logo": "uploads/gateway/paystack.png",
+    "namespace": "App\\Lib\\Paystack",
+    "phone_required": "0",
+    "currency_name": "USD",
+    "data": {
+      "public_key":"",
+      "secret_key":""
+    },
+    "is_auto": 1
+  },
+  {
+    "name": "flutterwave",
+    "logo": "uploads/gateway/flutterwave.png",
+    "namespace": "App\\Lib\\Flutterwave",
+    "phone_required": "1",
+    "currency_name": "USD",
+    "data": {
+      "public_key":"",
+      "secret_key":"",
+      "encryption_key":"",
+      "payment_options":"card"
+    },
+    "is_auto": 1
+  },
+  {
+    "name": "payu",
+    "logo": "uploads/gateway/payu.png",
+    "namespace": "App\\Lib\\Payu",
+    "phone_required": "1",
+    "currency_name": "USD",
+    "data": {
+      "merchant_key":"",
+      "merchant_salt":"",
+      "auth_header":""
+    },
+    "is_auto": 1
+  },
+  {
+    "name": "thawani",
+    "logo": "uploads/gateway/thawani.png",
+    "namespace": "App\\Lib\\Thawani",
+    "phone_required": "1",
+    "currency_name": "USD",
+    "data": {
+      "secret_key":"",
+      "publishable_key":""
+    },
+    "is_auto": 1
+  },
+  {
+    "name": "manual",
+    "logo": "uploads/gateway/cash.png",
+    "namespace": "App\\Lib\\CustomGetway",
+    "phone_required": "0",
+    "currency_name": "USD",
+    "data": "",
+    "is_auto": 0
+  }
+]
