@@ -720,7 +720,7 @@ class DomainController extends Controller
     {
         $info=Tenant::where('user_id',Auth::id())->findorFail($id);
 
-        $info->update(['maintenance_mode' => null]);
+        $info->update(['maintenance_mode' => Null]);
 
         return response()->json(__('Maintenance Mode Disabled successfully'));
     }

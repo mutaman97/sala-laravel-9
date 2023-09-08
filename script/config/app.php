@@ -235,7 +235,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'PDF'  => Barryvdh\DomPDF\Facade::class,
+        'PDF'  => Barryvdh\DomPDF\Facade\Pdf::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
