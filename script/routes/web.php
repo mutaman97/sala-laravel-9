@@ -15,15 +15,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// DISABLED BY MUTAMAN
 
-Route::get('cache-clear',function(){
-   Artisan::call('cache:clear');
-   Artisan::call('config:clear');
-});
+// Route::get('cache-clear',function(){
+//    Artisan::call('cache:clear');
+//    Artisan::call('config:clear');
+// });
 
-Route::get('php-info',function(){
-  phpinfo();
-});
+// Route::get('php-info',function(){
+//   phpinfo();
+// });
+
+// END
 
 
 // Match my own domain
