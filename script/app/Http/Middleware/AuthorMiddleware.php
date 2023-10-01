@@ -21,7 +21,7 @@ class AuthorMiddleware
                 return $next($request);
             }
         }else{
-            return redirect()->route('login');
-        } 
+            return to_route('login');
+        }
     }
 }

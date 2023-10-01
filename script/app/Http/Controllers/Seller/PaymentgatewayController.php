@@ -66,7 +66,7 @@ class PaymentgatewayController extends Controller
 
 
 
-        return redirect()->route('seller.payment.edit',$getway->id);
+        return to_route('seller.payment.edit',$getway->id);
 
     }
 
@@ -75,7 +75,7 @@ class PaymentgatewayController extends Controller
         abort_if(!getpermission('payment_gateway'),401);
         Getway::findOrFail($payment)->delete();
 
-        return redirect()->route('seller.payment.gateway')->with('message', __('Payment Gateway Successfully Removed'));
+        return to_route('seller.payment.gateway')->with('message', __('Payment Gateway Successfully Removed'));
     }
 
 

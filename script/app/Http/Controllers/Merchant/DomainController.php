@@ -557,10 +557,10 @@ class DomainController extends Controller
     {
         $startTime = microtime(true) * 1000; // Start time in milliseconds
 
-        // $request->validate([
-        //     'email' => 'required|email',
-        //     'password' => 'required|min:8|max:20|confirmed',
-        // ]);
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8|max:20|confirmed',
+        ]);
 
         if (Session::has('store_data'))
         {

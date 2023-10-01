@@ -125,7 +125,7 @@ class CustomerController extends Controller
 
         Auth::loginUsingId($user->id);
         event(new Registered($user)); // Trigger the Registered event for sending email verification
-        // return redirect()->route('login')->with('status', __('A verification link has been sent to your email address. Please check your email to verify your account'));
+        // return to_route('login')->with('status', __('A verification link has been sent to your email address. Please check your email to verify your account'));
 
         return redirect('/customer/dashboard')->with('status', __('A verification link has been sent to your email address. Please check your email to verify your account'));
     }

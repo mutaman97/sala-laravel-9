@@ -59,7 +59,7 @@ class Paystack {
         $data['charge']=$array['charge'];
         $data['phone']=$array['phone'];
         $test_mode=$array['test_mode'];
-        
+
         $data['getway_id']=$array['getway_id'];
         $data['main_amount']=$array['amount'];
         $data['billName']=$billName;
@@ -67,7 +67,7 @@ class Paystack {
         $data['email']=$email;
         $data['currency']=$currency;
         $data['is_fallback']=$array['is_fallback'] ?? 0;
-        
+
 
         if($test_mode == 0){
             $data['env']=false;
@@ -82,9 +82,9 @@ class Paystack {
         Session::put('paystack_credentials',$data);
 
         if (tenant() != null) {
-            return redirect()->route('order.paystack.view');
+            return to_route('order.paystack.view');
         }
-        return redirect()->route('merchant.paystack.view');
+        return to_route('merchant.paystack.view');
 
     }
 
@@ -116,12 +116,12 @@ class Paystack {
 
 		$err = curl_error($curl);
         curl_close($curl);
-        
+
 
 		if ($err) {
              Session::forget('paystack_credentials');
-             $data['payment_status'] = 0;  
-             Session::put('payment_info',$data); 
+             $data['payment_status'] = 0;
+             Session::put('payment_info',$data);
 			 return redirect(Paystack::redirect_if_payment_faild());
 		} else {
 			$data=json_decode($response);
@@ -141,7 +141,7 @@ class Paystack {
                 $pay_data['payment_status'] = 1;
                 $pay_data['is_fallback'] = $info['is_fallback'];
 
-                
+
 
                 Session::forget('paystack_credentials');
                 Session::put('payment_info',$pay_data);
@@ -173,7 +173,7 @@ class Paystack {
             "Cache-Control: no-cache",
             ),
         ));
-        
+
         $response = curl_exec($curl);
         $err = curl_error($curl);
         curl_close($curl);

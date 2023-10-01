@@ -24,12 +24,12 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 if(Auth::check() && Auth::user()->role_id == 1) {
-                    return redirect()->route('admin.dashboard');
-                } 
+                    return to_route('admin.dashboard');
+                }
                 elseif(Auth::check() && Auth::User()->role_id == 2) {
 
-                    return redirect()->route('merchant.dashboard');
-                    
+                    return to_route('merchant.dashboard');
+
                 }elseif(Auth::check() && Auth::User()->role_id == 3) {
                     return redirect('/seller/dashboard');
                 }elseif(Auth::check() && Auth::User()->role_id == 4)
@@ -40,7 +40,7 @@ class RedirectIfAuthenticated
                     return redirect('/rider/dashboard');
                 }
                 else {
-                    return redirect()->route('login');
+                    return to_route('login');
                 }
             }
         }

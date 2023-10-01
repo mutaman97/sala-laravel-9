@@ -48,7 +48,7 @@ class Razorpay {
     public static function make_payment($array)
     {
         $currency=$array['currency'];
-       
+
         $email=$array['email'];
         $amount=$array['pay_amount'];
         $name=$array['name'];
@@ -64,15 +64,15 @@ class Razorpay {
         $data['main_amount']=$array['amount'];
         $test_mode=$array['test_mode'];
         $data['test_mode']=$test_mode;
-        
-       
+
+
         $data['billName']=$billName;
         $data['name']=$name;
         $data['email']=$email;
         $data['currency']=$currency;
-       
-        
-     
+
+
+
         if($test_mode == 0){
             $data['env']=false;
             $test_mode=false;
@@ -89,9 +89,9 @@ class Razorpay {
 
         Session::put('razorpay_response',$response);
         if (tenant() != null) {
-            return redirect()->route('order.razorpay.view');
+            return to_route('order.razorpay.view');
         }
-        return redirect()->route('razorpay.view');
+        return to_route('razorpay.view');
 
     }
 
@@ -139,7 +139,7 @@ class Razorpay {
     {
       if(Session::has('razorpay_credentials')){
         $order_info= Session::get('razorpay_credentials');
-       
+
         // Now verify the signature is correct . We create the private function for verify the signature
         $signatureStatus = Razorpay::SignatureVerify(
             $request->all()['rzp_signature'],
@@ -158,20 +158,20 @@ class Razorpay {
             $data['amount'] =$order_info['amount'];
             $data['billName']=$order_info['billName'];
             $data['getway_id'] = $order_info['getway_id'];
-            
+
             $data['amount'] = $order_info['main_amount'];
             $data['charge'] = $order_info['charge'];
             $data['status'] = 1;
-            $data['payment_status'] = 1; 
+            $data['payment_status'] = 1;
             $data['is_fallback'] = $order_info['is_fallback'];
-            
+
             Session::put('payment_info',$data);
             Session::forget('razorpay_credentials');
             return redirect(Razorpay::redirect_if_payment_success());
         }
         else{
-            $data['payment_status'] = 0;  
-            Session::put('payment_info',$data); 
+            $data['payment_status'] = 0;
+            Session::put('payment_info',$data);
             Session::forget('razorpay_credentials');
             return redirect(Razorpay::redirect_if_payment_faild());
         }
@@ -212,7 +212,7 @@ class Razorpay {
         } catch (\Throwable $th) {
             return 0;
         }
-        
+
     }
 
 

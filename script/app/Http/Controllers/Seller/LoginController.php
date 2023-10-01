@@ -23,9 +23,9 @@ class LoginController extends Controller
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user,true);
 
-            return redirect()->route('login');
+            return to_route('login');
         }else{
-            return redirect()->route('login');
+            return to_route('login');
         }
 
     }

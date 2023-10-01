@@ -115,8 +115,8 @@ class RegisterController extends Controller
        event(new Registered($user)); // Trigger the Registered event
 
         // TODO ---- this bug dont show the flash message at the dashboard
-        return redirect()->route('login')->with('status', __('A verification link has been sent to your email address. Please check your email to verify your account'));
+        return to_route('login')->with('status', __('A verification link has been sent to your email address. Please check your email to verify your account'));
         // logger($user);
-        // return redirect()->route('login');
+        // return to_route('login');
     }
 }

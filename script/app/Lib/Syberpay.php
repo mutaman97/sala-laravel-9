@@ -382,7 +382,7 @@ class Syberpay {
                    Session::forget('payment_info');
                    Session::flash('message', 'Something wrong please contact with support..!');
                    Session::flash('type', 'error');
-                  return redirect()->route('merchant.plan.index');
+                  return to_route('merchant.plan.index');
                 }
 
 
@@ -395,9 +395,9 @@ class Syberpay {
 
 
                 if ($status != 0) {
-                    return redirect()->route('merchant.plan.enroll');
+                    return to_route('merchant.plan.enroll');
                 }else{
-                    return redirect()->route('merchant.plan.index');
+                    return to_route('merchant.plan.index');
                 }
 
            }

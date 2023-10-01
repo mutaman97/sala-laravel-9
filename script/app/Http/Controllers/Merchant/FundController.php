@@ -175,7 +175,7 @@ class FundController extends Controller
         Session::flash('message', __('Transaction Filed!'));
         Session::flash('type', 'danger');
 
-        return redirect()->route('merchant.fund.index');
+        return to_route('merchant.fund.index');
     }
 
     /**

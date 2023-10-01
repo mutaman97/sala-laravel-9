@@ -73,7 +73,7 @@ class PlanController extends Controller
             Session::put('order_id', $order->id);
             Session::put('plan',$plan->id);
 
-            return redirect()->route('merchant.plan.enroll');
+            return to_route('merchant.plan.enroll');
         }else{
             return view('merchant.plan.gateways', compact('gateways', 'plan','plan_data','tax'));
         }
@@ -94,9 +94,9 @@ class PlanController extends Controller
                 Session::put('domain_data', $data);
                 Session::put('payment_info', $data);
                 Session::put('plan', $request->plan_id);
-                return redirect()->route('merchant.payment.success');
+                return to_route('merchant.payment.success');
             }else{
-                return redirect()->route('merchant.plan.index')->with('message','Already enrolled in Trial Plan! Select Other Plan')->with('type','danger');
+                return to_route('merchant.plan.index')->with('message','Already enrolled in Trial Plan! Select Other Plan')->with('type','danger');
             }
         }
 
@@ -217,7 +217,7 @@ class PlanController extends Controller
            Session::forget('payment_info');
            Session::flash('message', 'Something wrong please contact with support..!');
            Session::flash('type', 'error');
-          return redirect()->route('merchant.plan.index');
+          return to_route('merchant.plan.index');
         }
 
 
@@ -230,9 +230,9 @@ class PlanController extends Controller
 
 
         if ($status != 0) {
-            return redirect()->route('merchant.plan.enroll');
+            return to_route('merchant.plan.enroll');
         }else{
-            return redirect()->route('merchant.plan.index');
+            return to_route('merchant.plan.index');
         }
     }
 
@@ -247,7 +247,7 @@ class PlanController extends Controller
         abort_if(empty($order_id),404);
 
 
-        return redirect()->route('merchant.plan.strorecreate');
+        return to_route('merchant.plan.strorecreate');
 
     }
 
@@ -423,7 +423,7 @@ class PlanController extends Controller
         Session::flash('type', 'danger');
         Session::forget('payment_info');
         Session::forget('payment_type');
-        return redirect()->route('merchant.plan.index');
+        return to_route('merchant.plan.index');
     }
 
     /**
@@ -484,7 +484,7 @@ class PlanController extends Controller
    {
         $info=Tenant::where('user_id',Auth::id())->with('orderwithplan')->findorFail($id);
         if ($info->orderwithplan->plan->is_trial == 1) {
-            return redirect()->route('merchant.domain.plan',$id);
+            return to_route('merchant.domain.plan',$id);
         }
        return redirect('/partner/plancharge/'.$id.'/'.$info->orderwithplan->plan->id);
    }
@@ -515,7 +515,7 @@ class PlanController extends Controller
         $plan = Plan::where([['status', 1], ['is_default', 0],['is_trial', 0],['price','>',$last_order_price]])->findorFail($id);
 
         if (empty($plan)) {
-        return redirect()->route('merchant.domain.plan',$domain);
+        return to_route('merchant.domain.plan',$domain);
         }
 
         $gateways = Getway::where('name', '!=', 'free')->where('status',1)->get();

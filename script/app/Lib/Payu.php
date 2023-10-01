@@ -114,7 +114,7 @@ class Payu {
        Session::put('payu_credentials',$data);
 
         if ($data) {
-            return redirect()->route('payu.view');
+            return to_route('payu.view');
         }
 
     }

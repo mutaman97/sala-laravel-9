@@ -17,19 +17,19 @@ class AdminMiddleware
     public function handle($request, Closure $next)
     {
         if (Auth::check() && Auth::User()->role_id == 1) {
-            
+
             if (str_replace('www.', '', $request->getHost()) != env('APP_PROTOCOLESS_URL')) {
                 Auth::logout();
                 abort(404);
             }
             if (Auth::user()->status != 1) {
                 Auth::logout();
-                return redirect()->route('login');
+                return to_route('login');
             }
             return $next($request);
-           
+
         }else{
-            return redirect()->route('login');
-        } 
+            return to_route('login');
+        }
     }
 }

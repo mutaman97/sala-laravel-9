@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\BlogController;
 
 
 
@@ -35,22 +38,33 @@ Route::group(['domain' => env('APP_URL')], function($domain)
 
     Auth::routes(['verify' => true]); // Include the 'verify' option to enable email verification routes
 
-    Route::get('/','WelcomeController@index')->name('welcome');
-    Route::get('blog/{title}','BlogController@show')->name('blog.show');
-    Route::get('blogs/search','BlogController@search')->name('blog.search');
-    Route::get('blogs','BlogController@lists')->name('blog.lists');
+    Route::controller(WelcomeController::class)->group(function () {
+        Route::get('/', 'index')->name('welcome');
+        Route::get('demos','demos')->name('demos');
+        Route::post('/seller/lang/switch','lang_switch')->name('lang.switch');
+        Route::post('subscribe','subscribe')->name('subscribe');
+    });
+
+    Route::controller(BlogController::class)->group(function() {
+        Route::get('blog/{title}','show')->name('blog.show');
+        Route::get('blogs/search','search')->name('blog.search');
+        Route::get('blogs','lists')->name('blog.lists');
+    });
+
     Route::get('page/{slug}','PageController@show')->name('page.show');
-    Route::get('contact','ContactController@index')->name('contact.index');
-    Route::post('contact/send','ContactController@send')->name('contact.send')->middleware('throttle:2,1');
+
+    Route::controller(ContactController::class)->group(function() {
+        Route::get('contact','index')->name('contact.index');
+        Route::post('contact/send','send')->name('contact.send')->middleware('throttle:2,1');
+    });
+
     Route::get('pricing','PricingController@index')->name('princing.index');
-    Route::get('demos','WelcomeController@demos')->name('demos');
-    //Added by mutaman for seller RTL
-    Route::post('/seller/lang/switch','WelcomeController@lang_switch')->name('lang.switch');
-    //End
-    Route::post('subscribe','WelcomeController@subscribe')->name('subscribe');
-    Route::get('register','RegisterController@index')->name('user.register')->middleware('guest');
-    Route::get('user/login','RegisterController@login')->name('user.login')->middleware('guest');
-    Route::post('user/store','RegisterController@store')->name('user.store')->middleware('guest');
+
+    Route::controller(RegisterController::class)->group(function() {
+        Route::get('register','index')->name('user.register')->middleware('guest');
+        Route::get('user/login','login')->name('user.login')->middleware('guest');
+        Route::post('user/store','store')->name('user.store')->middleware('guest');
+    });
 
     // **---------------------------------------CRON JOB ROUTES START---------------------------------------** //
 
