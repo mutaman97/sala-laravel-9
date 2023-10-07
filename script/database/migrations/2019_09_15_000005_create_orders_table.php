@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -23,12 +23,12 @@ class CreateOrdersTable extends Migration
             $table->integer('is_auto')->default(0); // 1 = recurring renew 0 =menual renew
             $table->double('tax')->nullable();
             $table->date('will_expire')->nullable();
-            $table->double('price');          
+            $table->double('price');
             $table->integer('status')->default(2); //1= active 0=faild/cancel 2= pending 3=expired
             $table->integer('payment_status')->default(2); //1= active 0=faild/cancel 2= pending 3=expired
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('plan_id')->references('id')->on('plans')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('getway_id')->references('id')->on('getways')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->cascadeOnDelete();
+            $table->foreign('plan_id')->references('id')->on('plans')->onUpdate('cascade')->cascadeOnDelete();
+            $table->foreign('getway_id')->references('id')->on('getways')->onUpdate('cascade')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -42,4 +42,4 @@ class CreateOrdersTable extends Migration
     {
         Schema::dropIfExists('orders');
     }
-}
+};

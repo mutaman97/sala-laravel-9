@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePricesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -28,15 +28,15 @@ class CreatePricesTable extends Migration
 
             $table->foreign('term_id')
             ->references('id')->on('terms')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
 
             $table->foreign('productoption_id')
             ->references('id')->on('productoptions')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
 
             $table->foreign('category_id')
             ->references('id')->on('categories')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
         });
     }
 
@@ -49,4 +49,4 @@ class CreatePricesTable extends Migration
     {
         Schema::dropIfExists('prices');
     }
-}
+};

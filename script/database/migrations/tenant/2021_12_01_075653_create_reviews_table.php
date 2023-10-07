@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReviewsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,18 +20,18 @@ class CreateReviewsTable extends Migration
             $table->unsignedBigInteger('term_id');
             $table->integer('rating')->default(5);
             $table->text('comment')->nullable();
-            
+
             $table->foreign('order_id')
             ->references('id')->on('orders')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
 
             $table->foreign('user_id')
             ->references('id')->on('users')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
 
             $table->foreign('term_id')
             ->references('id')->on('terms')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -45,4 +45,4 @@ class CreateReviewsTable extends Migration
     {
         Schema::dropIfExists('reviews');
     }
-}
+};

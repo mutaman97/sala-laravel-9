@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTenantsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -30,9 +30,10 @@ class CreateTenantsTable extends Migration
             $table->foreign('user_id')
             ->references('id')
             ->on('users')
-            ->onDelete('cascade');
+            ->cascadeOnDelete();
 
-            $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->cascadeOnDelete();
+            $table->json('maintenance_mode')->nullable();
         });
     }
 
@@ -45,4 +46,4 @@ class CreateTenantsTable extends Migration
     {
         Schema::dropIfExists('tenants');
     }
-}
+};

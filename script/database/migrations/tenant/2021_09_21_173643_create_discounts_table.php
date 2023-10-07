@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDiscountsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -21,11 +21,11 @@ class CreateDiscountsTable extends Migration
             $table->integer('price_type')->default(1); //0 = flat dicount 1= percentage discount
             $table->date('ending_date')->nullable();
 
-            
+
             //$table->timestamps();
             $table->foreign('term_id')
             ->references('id')->on('terms')
-            ->onDelete('cascade');
+            ->cascadeOnDelete();
         });
     }
 
@@ -38,4 +38,4 @@ class CreateDiscountsTable extends Migration
     {
         Schema::dropIfExists('discounts');
     }
-}
+};

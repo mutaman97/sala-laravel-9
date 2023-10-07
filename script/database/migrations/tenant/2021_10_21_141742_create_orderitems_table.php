@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderitemsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -20,14 +20,14 @@ class CreateOrderitemsTable extends Migration
             $table->text('info')->nullable();
             $table->integer('qty')->defult(1);
             $table->double('amount');
-            
+
             $table->foreign('order_id')
             ->references('id')->on('orders')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
 
              $table->foreign('term_id')
             ->references('id')->on('terms')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
         });
     }
 
@@ -40,4 +40,4 @@ class CreateOrderitemsTable extends Migration
     {
         Schema::dropIfExists('orderitems');
     }
-}
+};

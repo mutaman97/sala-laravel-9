@@ -15,6 +15,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
         "laravel/framework": "^9.0",
+        "laravel/socialite": "^5.9",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
         "league/flysystem-aws-s3-v3": "^3.0",

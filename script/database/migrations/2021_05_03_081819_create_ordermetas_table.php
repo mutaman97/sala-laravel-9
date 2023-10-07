@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdermetasTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,10 +18,10 @@ class CreateOrdermetasTable extends Migration
             $table->unsignedBigInteger('order_id');
             $table->string('key');
             $table->text('value')->nullable();
-            
+
             $table->foreign('order_id')
             ->references('id')->on('orders')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
         });
     }
 
@@ -34,4 +34,4 @@ class CreateOrdermetasTable extends Migration
     {
         Schema::dropIfExists('ordermetas');
     }
-}
+};

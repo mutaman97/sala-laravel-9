@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderstocksTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -21,11 +21,11 @@ class CreateOrderstocksTable extends Migration
 
             $table->foreign('order_id')
             ->references('id')->on('orders')
-            ->onDelete('cascade'); 
-            
+            ->cascadeOnDelete();
+
             $table->foreign('price_id')
             ->references('id')->on('prices')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
         });
     }
 
@@ -38,4 +38,4 @@ class CreateOrderstocksTable extends Migration
     {
         Schema::dropIfExists('orderstocks');
     }
-}
+};

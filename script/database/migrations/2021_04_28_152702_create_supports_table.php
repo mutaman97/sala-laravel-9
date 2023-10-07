@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSupportsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -18,8 +18,8 @@ class CreateSupportsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('ticket_no');
             $table->string('title')->nullable();
-            $table->integer('status')->default(2); 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('status')->default(2);
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -33,4 +33,4 @@ class CreateSupportsTable extends Migration
     {
         Schema::dropIfExists('supports');
     }
-}
+};

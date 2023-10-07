@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdershippingsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -27,22 +27,22 @@ class CreateOrdershippingsTable extends Migration
             $table->double('long')->nullable();
             $table->integer('status_id')->default(3); //3= pending 1= complete 2= fail
             $table->string('tracking_no')->nullable();
-            
+
             $table->foreign('order_id')
             ->references('id')->on('orders')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
 
             $table->foreign('location_id')
             ->references('id')->on('locations')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
 
             $table->foreign('shipping_id')
             ->references('id')->on('categories')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
 
             $table->foreign('user_id')
             ->references('id')->on('users')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
         });
     }
 
@@ -55,4 +55,4 @@ class CreateOrdershippingsTable extends Migration
     {
         Schema::dropIfExists('ordershippings');
     }
-}
+};

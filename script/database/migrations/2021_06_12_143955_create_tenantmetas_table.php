@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTenantmetasTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -19,7 +19,7 @@ class CreateTenantmetasTable extends Migration
             $table->string('key');
             $table->text('value');
             $table->timestamps();
-            $table->foreign('tenant_id')->references('id')->on('tenants')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onUpdate('cascade')->cascadeOnDelete();
         });
     }
 
@@ -32,4 +32,4 @@ class CreateTenantmetasTable extends Migration
     {
         Schema::dropIfExists('tenantmetas');
     }
-}
+};

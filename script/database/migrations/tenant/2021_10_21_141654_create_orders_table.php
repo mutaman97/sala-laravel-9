@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -24,22 +24,22 @@ class CreateOrdersTable extends Migration
             $table->double('tax')->default(0);
             $table->double('discount')->default(0);
             $table->double('total')->default(0);
-            $table->string('order_method')->nullable(); 
-            $table->integer('order_from')->default(1); //1=websiteend 2=api end 3= adminend 
+            $table->string('order_method')->nullable();
+            $table->integer('order_from')->default(1); //1=websiteend 2=api end 3= adminend
             $table->string('notify_driver')->default('mail');//notification driver
             $table->timestamps();
-            
+
             $table->foreign('user_id')
             ->references('id')->on('users')
-            ->onDelete('cascade'); 
-            
+            ->cascadeOnDelete();
+
             $table->foreign('getway_id')
             ->references('id')->on('getways')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
 
             $table->foreign('status_id')
             ->references('id')->on('categories')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
         });
     }
 
@@ -52,4 +52,4 @@ class CreateOrdersTable extends Migration
     {
         Schema::dropIfExists('orders');
     }
-}
+};

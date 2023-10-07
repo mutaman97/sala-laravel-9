@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductoptionsTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,18 +17,18 @@ class CreateProductoptionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('term_id'); //product id
             $table->unsignedBigInteger('category_id'); //attribute id
-         
+
             $table->integer('select_type')->default(0); //1= multiple select 0= single select
             $table->integer('is_required')->default(0);
 
 
             $table->foreign('term_id')
             ->references('id')->on('terms')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
 
             $table->foreign('category_id')
             ->references('id')->on('categories')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
         });
     }
 
@@ -41,4 +41,4 @@ class CreateProductoptionsTable extends Migration
     {
         Schema::dropIfExists('productoptions');
     }
-}
+};

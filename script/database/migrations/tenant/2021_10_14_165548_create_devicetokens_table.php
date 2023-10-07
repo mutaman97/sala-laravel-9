@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDevicetokensTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -23,7 +23,7 @@ class CreateDevicetokensTable extends Migration
 
             $table->foreign('user_id')
             ->references('id')->on('users')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
         });
     }
 
@@ -36,4 +36,4 @@ class CreateDevicetokensTable extends Migration
     {
         Schema::dropIfExists('devicetokens');
     }
-}
+};

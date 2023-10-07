@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFilesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -17,10 +17,10 @@ class CreateFilesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('term_id');
             $table->string('url');
-            
+
             $table->foreign('term_id')
             ->references('id')->on('terms')
-            ->onDelete('cascade'); 
+            ->cascadeOnDelete();
         });
     }
 
@@ -33,4 +33,4 @@ class CreateFilesTable extends Migration
     {
         Schema::dropIfExists('files');
     }
-}
+};
