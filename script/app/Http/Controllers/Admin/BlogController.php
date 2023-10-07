@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Term;
 use App\Models\Termmeta;
 use Illuminate\Http\Request;
-use Illuminate\Support\str;
+// use Illuminate\Support\str;
 use Storage;
 use DB;
 class BlogController extends Controller
@@ -18,7 +18,7 @@ class BlogController extends Controller
      */
     public function index()
     {
-     
+
         abort_if(!Auth()->user()->can('blog.index'), 401);
         $all_blogs = Term::with('excerpt')->where('type', 'blog')->paginate(20);
         return view('admin.blog.index', compact('all_blogs'));
@@ -52,7 +52,7 @@ class BlogController extends Controller
         ]);
         // Thum Image Check
         if ($request->hasFile('thum_image')) {
-          
+
             $image=$request->file('thum_image');
             $path='uploads/'.strtolower(env('APP_NAME')).date('/y/m/');
             $name = uniqid().date('dmy').time(). "." . strtolower($image->getClientOriginalExtension());
@@ -62,13 +62,13 @@ class BlogController extends Controller
             $file_url= Storage::disk(env('STORAGE_TYPE'))->url($path.$name);
             $preview=$file_url;
         }
-       
+
         DB::beginTransaction();
-        try { 
+        try {
         // Term Data Store
         $post           = new Term();
         $post->title    = $request->name;
-        $post->slug     = Str::slug($request->name, '-');
+        $post->slug     = str($request->name)->slug();
         $post->type     = 'blog';
         $post->status   = $request->status;
         $post->featured = 1;
@@ -92,10 +92,10 @@ class BlogController extends Controller
            DB::commit();
         } catch (\Throwable $th) {
             DB::rollback();
-            
+
             $errors['errors']['error']='Opps something wrong';
             return response()->json($errors,401);
-        }  
+        }
 
         return response()->json('Blog Added Successfully');
     }
@@ -144,7 +144,7 @@ class BlogController extends Controller
         // Term Data Update
         $blog_update           = Term::findOrFail($id);
         $blog_update->title    = $request->name;
-        $blog_update->slug     = str::slug($request->name);
+        $blog_update->slug     = str($request->name)->slug();
         $blog_update->type     = 'blog';
         $blog_update->status   = $request->status;
         $blog_update->featured = 1;
@@ -187,7 +187,7 @@ class BlogController extends Controller
             $blog_meta_thumimg_update->value   = $preview;
             $blog_meta_thumimg_update->save();
         }
-        
+
 
         return response()->json('Blog Updated Successfully');
     }
@@ -202,7 +202,7 @@ class BlogController extends Controller
     {
         abort_if(!Auth()->user()->can('blog.delete'), 401);
         $blog_destory = Term::findOrFail($id);
-        
+
 
         if (!empty($blog_destory->preview)) {
             $file=$blog_destory->preview->value;
@@ -215,6 +215,6 @@ class BlogController extends Controller
         }
 
         $blog_destory->delete();
-        return redirect()->back()->with('success', 'Successfully Deleted'); 
+        return redirect()->back()->with('success', 'Successfully Deleted');
     }
 }

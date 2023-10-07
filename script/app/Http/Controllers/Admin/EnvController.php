@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use File;
-use Illuminate\Support\Str;
+// use Illuminate\Support\Str;
 class EnvController extends Controller
 {
     /**
@@ -82,7 +82,7 @@ File::put('firebase-messaging-sw.js',$file);
        $APP_URL_WITH_TENANT=$request->APP_URL.'/store/';
 
         $APP_URL_WITHOUT_WWW=str_replace('www.','', url('/'));
-         $APP_NAME = Str::slug($request->APP_NAME);
+         $APP_NAME = str($request->APP_NAME)->slug();
 $txt ="APP_NAME=".$APP_NAME."
 APP_ENV=local
 APP_KEY=base64:rKqQdziq59oSCoL7ZcLZCp3sJ3h6A5r74utiD7Jt6Pg=

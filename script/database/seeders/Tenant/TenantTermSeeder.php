@@ -5,9 +5,6 @@ namespace Database\Seeders\Tenant;
 use Illuminate\Database\Seeder;
 use App\Models\Term;
 
-use Illuminate\Support\Str;
-
-
 class TenantTermSeeder extends Seeder
 {
     /**
@@ -96,7 +93,7 @@ class TenantTermSeeder extends Seeder
 
         foreach ($dataSets as $dataSet) {
             foreach ($dataSet['data'] as $title) {
-                $slug = Str::slug($title, '-');
+                $slug = str($title)->slug();
                 $terms[] = [
                     'full_id' => $full_id,
                     'title' => $title,

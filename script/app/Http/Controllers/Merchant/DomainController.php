@@ -48,7 +48,7 @@ class DomainController extends Controller
         $request->validate([
             'domain' => 'required|max:20|unique:tenants,id|regex:/^\S*$/u',
         ]);
-      $store_name = Str::slug($request->domain);
+      $store_name = str($request->domain)->slug();
       $store_name=str_replace('-','',$store_name);
       $tenant = Tenant::where('id',$store_name)->first();
       if($tenant)
@@ -71,7 +71,7 @@ class DomainController extends Controller
             'theme' => 'required',
         ]);
 
-        $name = Str::slug($request->store_name);
+        $name = str($request->store_name)->slug();
 
         $tenant = Tenant::where('id',$name)->first();
 
@@ -136,14 +136,14 @@ class DomainController extends Controller
       $validatedData = $request->validate([
         'name' => 'required|string|max:50',
       ]);
-    	$check=Tenant::where([['id',Str::slug($request->name)],['id','!=',$id]])->where('status',1)->first();
+    	$check=Tenant::where([['id',str($request->name)->slug()],['id','!=',$id]])->where('status',1)->first();
     	if(!empty($check)){
     		$error['errors']['domain']=__('Oops store already exists');
     		return response()->json($error,422);
     	}
 
     	$info=Tenant::where('user_id',Auth::id())->findorFail($id);
-    	$info->id=Str::slug($request->name);
+    	$info->id=str($request->name)->slug();
       if ($request->auto_renew) {
         $info->auto_renew = 1;
       }

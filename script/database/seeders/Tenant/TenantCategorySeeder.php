@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 use App\Models\Category;
 use App\Models\Categorymeta;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 
 class TenantCategorySeeder extends Seeder
@@ -190,7 +189,7 @@ class TenantCategorySeeder extends Seeder
                     $slug = $attributeTypes[rand(0, count($attributeTypes) - 1)];
 
                 } elseif (!is_string($slug)) {
-                    $slug = Str::slug($value, '-');
+                    $slug = str($value)->slug();
                 }
 
                 $insertData[] = [
@@ -222,7 +221,7 @@ class TenantCategorySeeder extends Seeder
 
             if ($parent_attribute) {
                 foreach ($items as $name) {
-                    $slug = Str::slug($name, '-');
+                    $slug = str($name)->slug();
 
                     $childInsertData[] = [
                         'name' => $name,
@@ -271,7 +270,7 @@ class TenantCategorySeeder extends Seeder
         $category_icon = [];
 
         foreach($categories as $index => $name){
-            $slug = Str::slug($name, '-');
+            $slug = str($name)->slug();
 
             $category = [
                 // 'id' => $i,

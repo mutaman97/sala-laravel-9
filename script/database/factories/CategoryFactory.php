@@ -4,8 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use Illuminate\Support\Str;
-
 
 class CategoryFactory extends Factory
 {
@@ -63,7 +61,7 @@ class CategoryFactory extends Factory
                     ];
                 case 'child_attribute':
                     $name = $this->faker->safeColorName();
-                    $slug = Str::slug($name, '-');
+                    $slug = str($name)->slug();
 
                     return [
                         'name' => $name,
@@ -80,7 +78,7 @@ class CategoryFactory extends Factory
                     ];
                 case 'category':
                     $name = $this->faker->word();
-                    $slug = Str::slug($name, '-');
+                    $slug = str($name)->slug();
 
                     return [
                         'name' => $name,
@@ -95,7 +93,7 @@ class CategoryFactory extends Factory
                     ];
                 case 'tag':
                     $name = $this->faker->word();
-                    $slug = Str::slug($name, '-');
+                    $slug = str($name)->slug();
 
                     return [
                         'name' => $name,
@@ -111,7 +109,7 @@ class CategoryFactory extends Factory
                 case 'brand':
 
                     $name = $this->faker->word();
-                    $slug = Str::slug($name, '-');
+                    $slug = str($name)->slug();
                     return [
                         'name' => $name,
                         'slug' => $slug,
@@ -126,7 +124,7 @@ class CategoryFactory extends Factory
                 case 'shipping':
 
                     $name = $this->faker->words(2, true);
-                    $slug = Str::slug($name, '-');
+                    $slug = str($name)->slug();
 
                     return [
                         'name' => $name,
@@ -141,7 +139,7 @@ class CategoryFactory extends Factory
                     ];
                 case 'product_feature':
                     $name = $this->faker->word();
-                    $slug = Str::slug($name, '-');
+                    $slug = str($name)->slug();
 
                     return [
                         'name' => $name,

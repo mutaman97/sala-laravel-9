@@ -9,7 +9,7 @@ use App\Models\Location;
 use App\Models\Shippingcategory;
 use App\Models\Order;
 use App\Models\Termcategory;
-use Str;
+// use Str;
 use Auth;
 
 
@@ -63,7 +63,7 @@ class Category extends Model
 
     public function makeSlug($title,$type)
     {
-       $slug_gen=Str::slug($title);
+       $slug_gen=str($title)->slug();
        $slug=Category::where('type',$type)->where('slug',$slug_gen)->count();
        if ($slug > 0) {
           $slug_count=$slug+1;

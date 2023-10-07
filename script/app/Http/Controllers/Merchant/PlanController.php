@@ -88,7 +88,7 @@ class PlanController extends Controller
             if($order == null){
                 $data['payment_status'] = 1;
                 $data['payment_type'] = 'new_plan_enroll';
-                $data['name'] = Str::slug(Session::get('store_data')['store_name']);
+                $data['name'] = str(Session::get('store_data')['store_name'])->slug();
                 $data['getway_id'] = Getway::where('name','free')->pluck('id')->first() ?? 13;
                 $data['payment_id'] = $this->uniquetrx();
                 Session::put('domain_data', $data);
@@ -104,7 +104,7 @@ class PlanController extends Controller
         $gateway_info = json_decode($gateway->data); //for creds
 
         $plan_data = json_decode($plan->data);
-        $domain_id=Tenant::find(Str::slug($request->name));
+        $domain_id=Tenant::find(str($request->name)->slug());
         if(!empty($domain_id)){
             Session::flash('error','The store name has already been taken.');
             return back();
@@ -144,7 +144,7 @@ class PlanController extends Controller
         $payment_data['request'] = $request->except('_token');
         $payment_data['request_from'] = 'merchant';
         Session::put('plan', $request->plan_id);
-        $domain['name'] = Str::slug($request->name);
+        $domain['name'] = str($request->name)->slug();
         Session::put('domain_data', $domain);
         if (!empty($gateway_info)) {
             foreach ($gateway_info as $key => $info) {
@@ -267,7 +267,7 @@ class PlanController extends Controller
         }
 
         $plan_id = Session::get('plan');
-        $name = Str::slug(Session::get('store_data')['store_name']);
+        $name = str(Session::get('store_data')['store_name'])->slug();
 
         $order_id = Session::get('order_id');
 
@@ -282,7 +282,7 @@ class PlanController extends Controller
         $exp_days =  $plan->duration;
         $expiry_date = \Carbon\Carbon::now()->addDays($exp_days)->format('Y-m-d');
 
-        $domain = env('APP_URL_WITH_TENANT'). Str::slug($name);
+        $domain = env('APP_URL_WITH_TENANT'). str($name)->slug();
 
         $status= env('AUTO_TENANT_APPROVE') == true ? 1 : 2;
         $plan_info=json_decode($plan->data ?? '');
@@ -305,7 +305,7 @@ class PlanController extends Controller
             $tenant->status = 2;
         }
 
-        $tenant->id=Str::slug($name);
+        $tenant->id=str($name)->slug();
         $tenant->uid=\App\Tenant::count()+1;
         $tenant->order_id=$order->id;
         $tenant->user_id=Auth::id();
@@ -317,7 +317,7 @@ class PlanController extends Controller
           try {
 
 
-           $tenant_id=Str::slug($name);
+           $tenant_id=str($name)->slug();
 
            $domain_name = $name.'.'.env('APP_PROTOCOLESS_URL');
            $type = 2;

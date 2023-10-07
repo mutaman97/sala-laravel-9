@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
-use Str;
+// use Str;
 use DB;
 use Auth;
 class CategoryController extends Controller

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\seller;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
-use Str;
+// use Str;
 use Auth;
 class TagController extends Controller
 {
@@ -129,7 +129,7 @@ class TagController extends Controller
 
     public function makeSlug($title,$type)
     {
-       $slug_gen=Str::slug($title);
+       $slug_gen=str($title)->slug();
        $slug=Category::where('type',$type)->where('slug',$slug_gen)->count();
        if ($slug > 0) {
           $slug_count=$slug+1;

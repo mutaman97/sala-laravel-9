@@ -47,7 +47,7 @@ class ThemesettingsController extends Controller
 
         $service = new Term();
         $service->title = $request->name;
-        $service->slug = Str::slug($request->name);
+        $service->slug = str($request->name)->slug();
         $service->type = 'service';
         $service->status = $request->status;
         $service->save();
@@ -98,7 +98,7 @@ class ThemesettingsController extends Controller
 
         $service = Term::findOrFail($id);
         $service->title = $request->name;
-        $service->slug = Str::slug($request->name);
+        $service->slug = str($request->name)->slug();
         $service->status = $request->status;
         $service->save();
 
@@ -308,7 +308,7 @@ class ThemesettingsController extends Controller
 
         $theme_demo = new Term();
         $theme_demo->title = $request->theme_name;
-        $theme_demo->slug = Str::slug($request->theme_name);
+        $theme_demo->slug = str($request->theme_name)->slug();
         $theme_demo->type = 'theme_demo';
         $theme_demo->status = $request->status;
         $theme_demo->save();
@@ -354,7 +354,7 @@ class ThemesettingsController extends Controller
 
         $theme_demo = Term::findOrFail($id);
         $theme_demo->title = $request->theme_name;
-        $theme_demo->slug = Str::slug($request->theme_name);
+        $theme_demo->slug = str($request->theme_name)->slug();
         $theme_demo->status = $request->status;
         $theme_demo->save();
 
@@ -437,7 +437,7 @@ class ThemesettingsController extends Controller
 
         $testimonial = new Term();
         $testimonial->title = $request->partner_name;
-        $testimonial->slug = Str::slug($request->partner_name);
+        $testimonial->slug = str($request->partner_name)->slug();
         $testimonial->type = 'testimonial';
         $testimonial->status = $request->status;
         $testimonial->save();
@@ -487,7 +487,7 @@ class ThemesettingsController extends Controller
 
         $testimonial = Term::findOrFail($id);
         $testimonial->title = $request->partner_name;
-        $testimonial->slug = Str::slug($request->partner_name);
+        $testimonial->slug = str($request->partner_name)->slug();
         $testimonial->status = $request->status;
         $testimonial->save();
 

@@ -4,8 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use Illuminate\Support\Str;
-
 class LocationFactory extends Factory
 {
     /**
@@ -17,7 +15,7 @@ class LocationFactory extends Factory
     {
 
         $cityName = $this->faker->unique()->city();
-        $slug = Str::slug($cityName, '-');
+        $slug = str($cityName)->slug();
 
         return [
             "name" => $cityName,

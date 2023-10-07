@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Term;
 use App\Models\Termmeta;
 use Illuminate\Http\Request;
-use Illuminate\Support\str;
+// use Illuminate\Support\str;
 
 class PageController extends Controller
 {
@@ -64,7 +64,7 @@ class PageController extends Controller
         // Page Data Store
         $page_store           = new Term();
         $page_store->title    = $request->page_title;
-        $page_store->slug     = Str::slug($request->page_title);
+        $page_store->slug     = str($request->page_title)->slug();
         $page_store->type     = 'page';
         $page_store->status   = $request->status;
         $page_store->featured = 1;
@@ -123,17 +123,17 @@ class PageController extends Controller
         // page data update
         $page_update  = Term::findOrFail($id);
         $page_thuimg = json_decode($page_update->page->value);
-  
+
 
         // Data
         $data = [
             'page_excerpt' => $request->page_excerpt,
             'page_content' => $request->page_content,
-           
+
         ];
 
         $page_update->title    = $request->page_title;
-        $page_update->slug     = Str::slug($request->page_title);
+        $page_update->slug     = str($request->page_title)->slug();
         $page_update->type     = 'page';
         $page_update->status   = $request->status;
         $page_update->featured = 1;
@@ -158,6 +158,6 @@ class PageController extends Controller
         abort_if(!Auth()->user()->can('page.delete'), 401);
         $page_destory = Term::findOrFail($id);
         $page_destory->delete();
-        return redirect()->back()->with('success', 'Successfully Deleted'); 
+        return redirect()->back()->with('success', 'Successfully Deleted');
     }
 }

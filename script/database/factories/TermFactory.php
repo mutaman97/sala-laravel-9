@@ -4,8 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use Illuminate\Support\Str;
-
 
 class TermFactory extends Factory
 {
@@ -18,7 +16,7 @@ class TermFactory extends Factory
     {
         $type = $this->faker->randomElement(['product', 'blog', 'page']);
         $title = $this->faker->sentence(3);
-        $slug = Str::slug($title, '-');
+        $slug = str($title)->slug();
 
         return [
             'full_id' => $this->faker->numerify('0000##'),

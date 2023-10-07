@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Location;
 use DB;
-use Str;
+// use Str;
 use Auth;
 class LocationController extends Controller
 {
@@ -69,7 +69,7 @@ class LocationController extends Controller
         $location=new Location;
         $location->name=$request->name;
         $location->avatar=$request->preview ?? null;
-        $location->slug=Str::slug($request->name);
+        $location->slug=str($request->name)->slug();
         $location->lat=$request->lat;
         $location->long=$request->long;
         $location->range=$request->range;

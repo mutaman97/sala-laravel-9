@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Term;
 use App\Models\Termmeta;
 use Illuminate\Http\Request;
-use Illuminate\Support\str;
+// use Illuminate\Support\str;
 use Storage;
 use DB;
 use Auth;
@@ -62,7 +62,7 @@ class BlogController extends Controller
 
         $post           = new Term();
         $post->title    = $request->title;
-        $post->slug     = Str::slug($request->title, '-');
+        $post->slug     = str($request->title)->slug();
         $post->type     = 'blog';
         $post->status   = $request->status;
         $post->save();
@@ -131,7 +131,7 @@ class BlogController extends Controller
         // Term Data Update
         $blog           = Term::findOrFail($id);
         $blog->title    = $request->title;
-        $blog->slug     = str::slug($request->title);
+        $blog->slug     = str($request->title)->slug();
         $blog->type     = 'blog';
         $blog->status   = $request->status;
         $blog->save();

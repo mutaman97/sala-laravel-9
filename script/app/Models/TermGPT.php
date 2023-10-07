@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Str;
+// use Str;
 use App\Models\Termmeta;
 // use App\Models\Termmedia;
 use App\Models\Category;
@@ -218,7 +218,7 @@ class Term extends Model
 
     public function makeSlug($title, $type)
     {
-        $slug_gen = Str::slug($title);
+        $slug_gen = str($title)->slug();
         $slug = Term::where('type', $type)->where('slug', $slug_gen)->count();
         if ($slug > 0) {
             $slug_count = $slug + 1;

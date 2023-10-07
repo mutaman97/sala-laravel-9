@@ -14,7 +14,7 @@ use App\Models\Tenantorder;
 use App\Models\Getway;
 use Auth;
 use DB;
-use Str;
+// use Str;
 use Session;
 use App\Models\Tenantmeta;
 use Storage;
@@ -27,10 +27,10 @@ class StoreController extends Controller
      */
     public function index()
     {
-        
+
         abort_if(!Auth()->user()->can('domain.list'),401);
         $posts=Tenant::query()->with('user','domain')->latest()->paginate(40);
-        
+
         return view('admin.domain.index',compact('posts'));
     }
 
@@ -57,7 +57,7 @@ class StoreController extends Controller
 
     public function dnsUpdate(Request $request)
     {
-        $request->validate([            
+        $request->validate([
             'dns_configure_instruction' => 'required',
             'support_instruction' => 'required',
         ]);
@@ -85,10 +85,10 @@ class StoreController extends Controller
     public function store(Request $request)
     {
 
-        $request->validate([            
+        $request->validate([
             'store_id' => 'required|max:100|unique:tenants,id',
-            'plan' => 'required',                    
-            'user_email' => 'required|email', 
+            'plan' => 'required',
+            'user_email' => 'required|email',
             'password' => 'required|confirmed',
             'address' => 'required',
             'city' => 'required',
@@ -96,11 +96,11 @@ class StoreController extends Controller
             'postal_code' => 'required',
             'getaway' => 'required',
             'trx' => 'required',
-            'status' => 'required'          
+            'status' => 'required'
         ]);
 
         $data = [
-            'store_name' => Str::slug($request->store_id),
+            'store_name' => str($request->store_id)->slug(),
             'email' => $request->user_email,
             'password' => $request->password,
             'address' => $request->address,
@@ -108,15 +108,15 @@ class StoreController extends Controller
             'postal_code' => $request->postal_code,
             'country' => $request->country
         ];
-  
-  
+
+
         Session::put('store_data',$data);
 
           if(env('AUTO_DB_CREATE') == false){
-             $request->validate([            
+             $request->validate([
                 'db_name' => 'required|max:100',
                 'db_username' => 'required|max:100',
-                            
+
             ]);
           }
         ini_set('max_execution_time', '0');
@@ -132,16 +132,16 @@ class StoreController extends Controller
         $expiry_date = \Carbon\Carbon::now()->addDays($plan->duration)->format('Y-m-d');
 
         if (env('SUBDOMAIN_TYPE') == 'real') {
-            $subdomain=Str::slug($request->store_id).'.'.env('APP_PROTOCOLESS_URL');
+            $subdomain=str($request->store_id).'.'.env('APP_PROTOCOLESS_URL')->slug();
             $subdomain_type=2;
         }
         else{
-            $subdomain=Str::slug($request->store_id);
+            $subdomain=str($request->store_id)->slug();
             $subdomain_type=2;
         }
         $tax = Option::where('key','tax')->first();
 
-       
+
         $tax_amount= ($plan->price / 100) * $tax->value;
         $uid=\App\Tenant::count();
         $uid=$uid+1;
@@ -149,7 +149,7 @@ class StoreController extends Controller
 
         $status=1;
         $order = new Order;
-      
+
         $order->plan_id = $plan->id;
         $order->user_id = $user->id;
         $order->getway_id = $request->getaway;
@@ -162,12 +162,12 @@ class StoreController extends Controller
         $order->save();
         $order_id=$order->id;
         if(env('AUTO_DB_CREATE') == true){
-          $tenant1 = Tenant::create(['id' => Str::slug($request->store_id),'user_id'=>$user->id,'will_expire'=>$expiry_date,'plan_info'=>$plan->data,'status'=>$request->status,'uid'=>$uid,'order_id' => $order_id]);
+          $tenant1 = Tenant::create(['id' => str($request->store_id)->slug(),'user_id'=>$user->id,'will_expire'=>$expiry_date,'plan_info'=>$plan->data,'status'=>$request->status,'uid'=>$uid,'order_id' => $order_id]);
           $tenant1->domains()->create(['domain'=>$subdomain,'type'=>$subdomain_type]);
 
           $log=new Tenantorder;
           $log->order_id=$order_id;
-          $log->tenant_id=Str::slug($request->store_id);
+          $log->tenant_id=str($request->store_id)->slug();
           $log->save();
 
 
@@ -176,14 +176,14 @@ class StoreController extends Controller
         }
         else{
           DB::beginTransaction();
-        
-           
-            
+
+
+
             try {
-              
+
                 $db_data='{"tenancy_db_name":"'.$request->db_name.'","tenancy_db_username":"'.$request->db_username.'","tenancy_db_password":"'.$request->db_password.'"}';
                 $tenant = new \App\Tenant;
-                $tenant->id=Str::slug($request->store_id);
+                $tenant->id=str($request->store_id)->slug;
                 $tenant->will_expire=$expiry_date;
                 $tenant->data=$db_data;
                 $tenant->user_id=$user->id;
@@ -195,24 +195,24 @@ class StoreController extends Controller
 
                 $domain= new \App\Models\Domain;
                 $domain->domain=$subdomain;
-                $domain->tenant_id=Str::slug($request->store_id);
+                $domain->tenant_id=str($request->store_id)->slug();
                 $domain->type=$subdomain_type;
                 $domain->save();
 
                 $log=new Tenantorder;
                 $log->order_id=$order_id;
-                $log->tenant_id=Str::slug($request->store_id);
+                $log->tenant_id=str($request->store_id)->slug();
                 $log->save();
                 if ($request->migrate == 'yes') {
-                \Artisan::call('tenants:migrate-fresh --tenants='.Str::slug($request->store_id));
-                \Artisan::call('tenants:seed --tenants='.Str::slug($request->store_id));
+                \Artisan::call('tenants:migrate-fresh --tenants='.str($request->store_id)->slug());
+                \Artisan::call('tenants:seed --tenants='.str($request->store_id)->slug());
                }
-              
 
-              
-            
+
+
+
             DB::commit();
-           
+
             } catch (Exception $e) {
               DB::rollback();
 
@@ -220,7 +220,7 @@ class StoreController extends Controller
               return response()->json($error,422);
             }
         }
-        
+
         if($plan->is_trial == 1)
         {
             $store_lock = true;
@@ -239,14 +239,14 @@ class StoreController extends Controller
         ];
 
         $tenantmeta = new Tenantmeta();
-        $tenantmeta->tenant_id = Str::slug($request->store_id);
+        $tenantmeta->tenant_id = str($request->store_id)->slug();
         $tenantmeta->key = 'tenant';
         $tenantmeta->value = json_encode($tenantdata);
         $tenantmeta->save();
 
 
         Session::forget('store_data');
-    
+
         return response()->json('Store Created');
     }
 
@@ -275,7 +275,7 @@ class StoreController extends Controller
         $info=Tenant::findorFail($id);
         return view('admin.domain.edit',compact('info'));
     }
-    
+
 
     /**
      * Update the specified resource in storage.
@@ -286,14 +286,14 @@ class StoreController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([            
-            'store_id' => 'required|max:100|unique:tenants,id,' . $id,                 
-            'user_email' => 'required|email',            
+        $request->validate([
+            'store_id' => 'required|max:100|unique:tenants,id,' . $id,
+            'user_email' => 'required|email',
         ]);
 
 
         $user=User::where('email',$request->user_email)->where('role_id',2)->first();
-        
+
         if(empty($user)){
             $error['errors']['email']='User not exists';
             return response()->json($error,422);
@@ -302,12 +302,12 @@ class StoreController extends Controller
         $row=DB::table('tenants')
         ->where('id', $id)
         ->update([
-        'id' => Str::slug($request->store_id),
+        'id' => str($request->store_id)->slug(),
         'user_id' => $user->id,
         'status' => $request->status,
         ]);
 
-        
+
 
         return response()->json('Domain Updated');
     }
@@ -325,21 +325,21 @@ class StoreController extends Controller
         return view('admin.domain.dbconfig',compact('info'));
     }
 
-   
-    
+
+
     //update databaseinfo and migration seeding
     public function databaseUpdate(Request $request,$id)
     {
-        $request->validate([            
-            'tenancy_db_name' => 'required|max:100',                        
+        $request->validate([
+            'tenancy_db_name' => 'required|max:100',
         ]);
         ini_set('max_execution_time', '0');
 
-        
-        
+
+
         DB::beginTransaction();
         try {
-       
+
          $tenant =  Tenant::findorFail($id);
          if (isset($request->db_username)) {
          $tenant->tenancy_db_username=$request->db_username;
@@ -350,20 +350,20 @@ class StoreController extends Controller
          if (isset($request->tenancy_db_name)) {
           $tenant->tenancy_db_name=$request->tenancy_db_name;
          }
-          
+
          $tenant->save();
 
          \Config::set('app.env', 'local');
 
-        if ($request->migrate == 'yes') {           
-            \Artisan::call('tenants:migrate --tenants='.Str::slug($id));
+        if ($request->migrate == 'yes') {
+            \Artisan::call('tenants:migrate --tenants='.str($id)->slug());
         }
-        
 
-        if ($request->migrate_fresh == 'yes') {            
-            \Artisan::call('tenants:migrate-fresh --tenants='.Str::slug($id));
-            \Artisan::call('tenants:seed --tenants='.Str::slug($id));          
-           
+
+        if ($request->migrate_fresh == 'yes') {
+            \Artisan::call('tenants:migrate-fresh --tenants='.str($id)->slug());
+            \Artisan::call('tenants:seed --tenants='.str($id)->slug());
+
         }
 
         DB::commit();
@@ -371,7 +371,7 @@ class StoreController extends Controller
             DB::rollback();
             $error['errors']['database']='Opps something wrong with demoimport please check the database credintials';
             return response()->json($error,422);
-        }       
+        }
 
         return response()->json('Update Successfully');
     }
@@ -389,14 +389,14 @@ class StoreController extends Controller
         $info=Tenant::findorFail($id);
         $plan=new \App\Models\Plan;
         $features=$plan->plandata;
-       
+
         return view('admin.domain.planconfig',compact('info','features'));
     }
 
     //update plandata
     public function planUpdate(Request $request,$id)
     {
-        
+
 
 
         $tenant = Tenant::findorFail($id);
@@ -405,7 +405,7 @@ class StoreController extends Controller
            $tenant->$key=$value;
         }
         $tenant->will_expire=$request->will_expire;
-       
+
         $tenant->save();
 
         return response()->json('Plan data updated');
@@ -423,11 +423,11 @@ class StoreController extends Controller
 
         abort_if(!Auth()->user()->can('domain.delete'),401);
         ini_set('max_execution_time', '0');
-        
+
 
         if($request->method == 'delete' && count($request->ids ?? []) > 0){
-           
-              
+
+
                 foreach($request->ids ?? [] as $row){
                   $tenant=\App\Models\Tenant::find($row);
                   Storage::disk(env('STORAGE_TYPE'))->deleteDirectory('uploads/'.$tenant->uid);
@@ -435,15 +435,15 @@ class StoreController extends Controller
                    try {
                     \App\Models\Tenant::destroy($row);
                    } catch (\Throwable $th) {
-                       
+
                    }
-                   
+
                 }
-                
-            
+
+
         }
-        
-        
+
+
 
 
         return response()->json('Store Deleted successfully');

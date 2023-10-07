@@ -5,8 +5,6 @@ namespace Database\Seeders\Tenant;
 use Illuminate\Database\Seeder;
 use App\Models\Location;
 
-use Illuminate\Support\Str;
-
 class TenantLocationSeeder extends Seeder
 {
     /**
@@ -46,7 +44,7 @@ class TenantLocationSeeder extends Seeder
             $locations[] = [
                 // "id" => $i,
                 "name" => $city,
-                "slug" => Str::slug($city, '-'), // Use the same $name variable here for generating the slug
+                "slug" => str($city)->slug(), // Use the same $name variable here for generating the slug
                 "avatar" => null,
                 "lat" => null,
                 "long" => null,

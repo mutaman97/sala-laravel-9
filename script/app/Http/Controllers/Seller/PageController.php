@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Term;
 use App\Models\Termmeta;
 use Illuminate\Http\Request;
-use Illuminate\Support\str;
+// use Illuminate\Support\str;
 use DB;
 use Auth;
 class PageController extends Controller
@@ -66,7 +66,7 @@ class PageController extends Controller
         // Page Data Store
         $page           = new Term();
         $page->title    = $request->page_title;
-        $page->slug     = Str::slug($request->page_title);
+        $page->slug     = str($request->page_title)->slug();
         $page->type     = 'page';
         $page->status   = $request->status;
         $page->save();
