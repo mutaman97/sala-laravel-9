@@ -33,7 +33,7 @@ class SettingController extends Controller
 	public function sitemapView()
 	{
 		
-		return response(file_get_contents(base_path('sitemap.xml')), 200, [
+		return response(file_get_contents(base_path('public/sitemap.xml')), 200, [
     		'Content-Type' => 'application/xml'
 		]);
 	}
