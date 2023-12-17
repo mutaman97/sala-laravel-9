@@ -33,6 +33,9 @@
         "spatie/laravel-permission": "^5.5",
         "spatie/laravel-translatable": "^6.5",
         "stancl/tenancy": "^3.4",
+        "symfony/http-client": "^6.4",
+        "symfony/mailgun-mailer": "^6.4",
+        "symfony/postmark-mailer": "^6.4",
         "tinify/tinify": "^1.5"
     },
     "require-dev": {

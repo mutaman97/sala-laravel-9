@@ -6,6 +6,21 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\LocalizationController;
+use App\Http\Controllers\Admin\StoreController;
+use App\Http\Controllers\Admin\DomainController;
+use App\Http\Controllers\Admin\SeoController;
+use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\EnvController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Seller\ProductController;
+use App\Http\Controllers\Seller\MediaController;
+use App\Http\Controllers\Seller\MedialistController;
+use App\Http\Controllers\Seller\BarcodeController;
+use App\Http\Controllers\Seller\RiderController;
+use App\Http\Controllers\Seller\SettingsController;
 
 
 
@@ -155,7 +170,7 @@ Route::group(['domain' => env('APP_URL')], function($domain)
         //Gateway crud controller
         Route::resource('gateway', PaymentGatewayController::class);
         //Blog crud controller
-        Route::resource('blog', BlogController::class);
+        Route::resource('blog', App\Http\Controllers\Admin\BlogController::class);
         //Page crud controller
         Route::resource('page', PageController::class);
 
@@ -252,7 +267,7 @@ Route::group(['domain' => env('APP_URL')], function($domain)
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
         Route::get('/dashboard-data','DashboardController@staticData');
 
-        Route::controller(DomainController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Merchant\DomainController::class)->group(function() {
 
             Route::get('domain', 'index')->name('domain.list');
             Route::get('domain/create','create')->name('domain.create');
@@ -294,7 +309,7 @@ Route::group(['domain' => env('APP_URL')], function($domain)
 
         Route::resource('plan', 'PlanController');
 
-        Route::controller(PlanController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Merchant\PlanController::class)->group(function() {
             Route::get('/domain/renew/{id}','renewView')->name('domain.renew');
             Route::get('/plan/domain/{id}','changePlan')->name('domain.plan');
             Route::get('/plancharge/{domain}/{id}', 'ChanePlanGateways')->name('plan.gateways');
@@ -338,7 +353,7 @@ Route::group(['domain' => env('APP_URL')], function($domain)
         Route::get('store/lock/{id}', [PlanController::class, 'lock'])->name('store.lock');
 
         // Order Routes
-        Route::get('order', [OrderController::class, 'index'])->name('order.index');
+        Route::get('order', [App\Http\Controllers\Merchant\OrderController::class, 'index'])->name('order.index');
     });
 
 });
@@ -352,9 +367,9 @@ Route::group(['domain' => env('APP_URL')], function($domain)
 
 Route::group(['as' => 'seller.', 'prefix' => 'seller', 'namespace' => 'Seller', 'middleware' => ['InitializeTenancyByDomain','PreventAccessFromCentralDomains','auth','seller','user','tenantenvironment']], function () {
     // Added by mutaman for store data modal
-    Route::post('/dashboard', [SitesettingsController::class, 'setStore'])->name('dashboard.modal');
+    Route::post('/dashboard', [App\Http\Controllers\Seller\SitesettingsController::class, 'setStore'])->name('dashboard.modal');
 
-    Route::controller(DashboardController::class)->group(function() {
+    Route::controller(App\Http\Controllers\Seller\DashboardController::class)->group(function() {
         Route::get('/dashboard', 'dashboard');
         Route::get('/dashboard/static', 'staticData');
         Route::get('/dashboard/perfomance/{period}', 'perfomance');
@@ -389,8 +404,8 @@ Route::group(['as' => 'seller.', 'prefix' => 'seller', 'namespace' => 'Seller', 
     Route::resource('table', TableController::class);
     Route::resource('barcode', BarcodeController::class);
     Route::get('barcodes/reset', [BarcodeController::class, 'reset'])->name('barcode.reset');
-    Route::resource('user', UserController::class);
-    Route::get('/user/login/{id}', [UserController::class, 'login'])->name('user.login');
+    Route::resource('user', App\Http\Controllers\Seller\UserController::class);
+    Route::get('/user/login/{id}', [App\Http\Controllers\Seller\UserController::class, 'login'])->name('user.login');
     Route::resource('rider', RiderController::class);
     Route::get('settings', [SettingsController::class, 'index']);
     Route::post('settings/update', [SettingsController::class, 'update'])->name('settings.update');
@@ -417,19 +432,19 @@ Route::group(['as' => 'seller.', 'prefix' => 'seller', 'namespace' => 'Seller', 
         Route::delete('language-remove-key/{id}','keyRemove')->name('language.keyremove');
     });
 
-    Route::get('calender', [CalenderController::class, 'index'])->name('calender.index');
-    Route::get('upcominOrders', [CalenderController::class, 'upcoming_orders'])->name('seller.order.upcoming');
+    Route::get('calender', [App\Http\Controllers\Seller\CalenderController::class, 'index'])->name('calender.index');
+    Route::get('upcominOrders', [App\Http\Controllers\Seller\CalenderController::class, 'upcoming_orders'])->name('seller.order.upcoming');
 
-    Route::post('product/barcode/search', [BarcodeController::class, 'search'])->name('barcode.search');
-    Route::post('barcode/generate', [BarcodeController::class, 'generate'])->name('barcode.generate');
+    Route::post('product/barcode/search', [App\Http\Controllers\Seller\BarcodeController::class, 'search'])->name('barcode.search');
+    Route::post('barcode/generate', [App\Http\Controllers\Seller\BarcodeController::class, 'generate'])->name('barcode.generate');
 
     // Reviews Route
-    Route::get('review', [ReviewController::class, 'index'])->name('review.index');
-    Route::post('review/destroy', [ReviewController::class, 'destroy'])->name('review.destroy');
+    Route::get('review', [App\Http\Controllers\Seller\ReviewController::class, 'index'])->name('review.index');
+    Route::post('review/destroy', [App\Http\Controllers\Seller\ReviewController::class, 'destroy'])->name('review.destroy');
 
     //pos routes
     Route::resource('pos', 'PosController');
-    Route::controller(PosController::class)->group(function() {
+    Route::controller(App\Http\Controllers\Seller\PosController::class)->group(function() {
         Route::get('products','productList')->name('product.json');
         Route::post('add-to-cart','addtocart')->name('add.tocart');
         Route::get('remove-cart/{id}','removecart')->name('remove.cart');
@@ -442,8 +457,8 @@ Route::group(['as' => 'seller.', 'prefix' => 'seller', 'namespace' => 'Seller', 
         Route::get('apply-tax','applyTax');
     });
 
-    Route::resource('order', OrderController::class);
-    Route::controller(OrderController::class)->group(function() {
+    Route::resource('order', App\Http\Controllers\Seller\OrderController::class);
+    Route::controller(App\Http\Controllers\Seller\OrderController::class)->group(function() {
         Route::post('orders/destroy','destroy')->name('order.multipledelete');
         Route::get('order/print/{id}','print')->name('order.print');
     });
@@ -466,29 +481,29 @@ Route::group(['as' => 'seller.', 'prefix' => 'seller', 'namespace' => 'Seller', 
     });
 
     //role routes
-    Route::resource('role', RoleController::class);
-    Route::post('roles/destroy', [RoleController::class, 'destroy'])->name('roles.destroy');
+    Route::resource('role', App\Http\Controllers\Seller\RoleController::class);
+    Route::post('roles/destroy', [App\Http\Controllers\Seller\RoleController::class, 'destroy'])->name('roles.destroy');
     // Admin Route
-    Route::resource('admin', AdminController::class);
-    Route::post('/admins/destroy', [AdminController::class, 'destroy'])->name('admins.destroy');
+    Route::resource('admin', App\Http\Controllers\Seller\AdminController::class);
+    Route::post('/admins/destroy', [App\Http\Controllers\Seller\AdminController::class, 'destroy'])->name('admins.destroy');
 
-    Route::resource('page', PageController::class);
-    Route::resource('blog', BlogController::class);
-    Route::resource('slider', SliderController::class);
-    Route::resource('banner', BannerController::class);
-    Route::resource('special-menu', SpecialmenuController::class);
+    Route::resource('page', App\Http\Controllers\Seller\PageController::class);
+    Route::resource('blog', App\Http\Controllers\Seller\BlogController::class);
+    Route::resource('slider', App\Http\Controllers\Seller\SliderController::class);
+    Route::resource('banner', App\Http\Controllers\Seller\BannerController::class);
+    Route::resource('special-menu', App\Http\Controllers\Seller\SpecialmenuController::class);
 
-    Route::controller(SiteController::class)->group(function() {
+    Route::controller(App\Http\Controllers\Seller\SiteController::class)->group(function() {
         Route::get('/store-settings','index');
         Route::post('/theme-data-update/{type}','updatethemesettings')->name('themeoption.update');
     });
 
-    Route::controller(SeoController::class)->group(function() {
+    Route::controller(App\Http\Controllers\Seller\SeoController::class)->group(function() {
         Route::get('settings/seo','index')->name('seo.index');
         Route::post('seo/{page}','update')->name('seo.update');
     });
 
-    Route::controller(SittingsController::class)->group(function() {
+    Route::controller(App\Http\Controllers\Seller\SettingsController::class)->group(function() {
         Route::get('settings/pwa','pwa')->name('pwa.index');
         Route::post('settings/pwa','pwa_update')->name('pwa.update');
         Route::get('settings/custom_css_js','custom_css_js')->name('custom_css_js.index');
@@ -500,17 +515,17 @@ Route::group(['as' => 'seller.', 'prefix' => 'seller', 'namespace' => 'Seller', 
 
 
 Route::group(['prefix'=>'rider', 'as' => 'rider.', 'namespace' => 'Rider','middleware'=>['InitializeTenancyByDomain','PreventAccessFromCentralDomains','auth','rider','user','tenantenvironment']], function(){
-    Route::controller(DashboardController::class)->group(function() {
+    Route::controller(App\Http\Controllers\Rider\DashboardController::class)->group(function() {
         Route::get('dashboard', 'dashboard')->name('dashboard');
         Route::get('live/orders', 'live_orders')->name('live.orders');
     });
 
-    Route::controller(SittingsController::class)->group(function() {
+    Route::controller(App\Http\Controllers\Rider\SettingsController::class)->group(function() {
         Route::get('settings', 'index')->name('settings.index');
         Route::post('settings', 'update')->name('settings.update');
     });
   
-    Route::controller(OrderController::class)->group(function() {
+    Route::controller(App\Http\Controllers\Rider\OrderController::class)->group(function() {
         Route::get('order', 'index')->name('order.index');
         Route::get('order/{id}', 'show')->name('order.show');
         Route::post('order/delivered', 'delivered')->name('order.delivered');
