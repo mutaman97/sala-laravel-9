@@ -1,26 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\WelcomeController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\SettingController;
-use App\Http\Controllers\LocalizationController;
-use App\Http\Controllers\Admin\StoreController;
-use App\Http\Controllers\Admin\DomainController;
-use App\Http\Controllers\Admin\SeoController;
-use App\Http\Controllers\Admin\PlanController;
-use App\Http\Controllers\Admin\EnvController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\PageController;
-use App\Http\Controllers\Seller\ProductController;
-use App\Http\Controllers\Seller\MediaController;
-use App\Http\Controllers\Seller\MedialistController;
-use App\Http\Controllers\Seller\BarcodeController;
-use App\Http\Controllers\Seller\RiderController;
-use App\Http\Controllers\Seller\SettingsController;
 
 
 
@@ -42,42 +22,43 @@ use App\Http\Controllers\Seller\SettingsController;
 //    Artisan::call('config:clear');
 // });
 
-// Route::get('php-info',function(){
-//   phpinfo();
-// });
+ Route::get('php-info',function(){
+   phpinfo();
+ });
 
 // END
 
 
 // Match my own domain
-Route::group(['domain' => env('APP_URL')], function($domain)
-{
+$appUrl = env('APP_URL');
+
+Route::group(['domain' => $appUrl], function ($domain) {
 
     Auth::routes(['verify' => true]); // Include the 'verify' option to enable email verification routes
 
-    Route::controller(WelcomeController::class)->group(function () {
+    Route::controller(App\Http\Controllers\WelcomeController::class)->group(function () {
         Route::get('/', 'index')->name('welcome');
         Route::get('demos','demos')->name('demos');
         Route::post('/seller/lang/switch','lang_switch')->name('lang.switch');
         Route::post('subscribe','subscribe')->name('subscribe');
     });
 
-    Route::controller(BlogController::class)->group(function() {
+    Route::controller(App\Http\Controllers\BlogController::class)->group(function() {
         Route::get('blog/{title}','show')->name('blog.show');
         Route::get('blogs/search','search')->name('blog.search');
         Route::get('blogs','lists')->name('blog.lists');
     });
 
-    Route::get('page/{slug}','PageController@show')->name('page.show');
+    Route::get('page/{slug}',[App\Http\Controllers\PageController::class, 'show'])->name('page.show');
 
-    Route::controller(ContactController::class)->group(function() {
+    Route::controller(App\Http\Controllers\ContactController::class)->group(function() {
         Route::get('contact','index')->name('contact.index');
         Route::post('contact/send','send')->name('contact.send')->middleware('throttle:2,1');
     });
 
-    Route::get('pricing','PricingController@index')->name('princing.index');
+    Route::get('pricing',[App\Http\Controllers\PricingController::class, 'index'])->name('princing.index');
 
-    Route::controller(RegisterController::class)->group(function() {
+    Route::controller(App\Http\Controllers\RegisterController::class)->group(function() {
         Route::get('register','index')->name('user.register')->middleware('guest');
         Route::get('user/login','login')->name('user.login')->middleware('guest');
         Route::post('user/store','store')->name('user.store')->middleware('guest');
@@ -85,7 +66,7 @@ Route::group(['domain' => env('APP_URL')], function($domain)
 
     // **---------------------------------------CRON JOB ROUTES START---------------------------------------** //
 
-    Route::controller(CronController::class)->group(function() {
+    Route::controller(App\Http\Controllers\CronController::class)->group(function() {
         //automatic charge from the credits
         Route::get('cron/make-charge', 'makeCharge');
         // Alert after Order Expired
@@ -96,21 +77,21 @@ Route::group(['domain' => env('APP_URL')], function($domain)
     });
 
 
-     Route::get('/sitemap.xml', [SettingController::class, 'sitemapView']);
-     Route::get('locale/lang', [LocalizationController::class, 'store'])->name('language.set');
+     Route::get('/sitemap.xml', [App\Http\Controllers\SettingController::class, 'sitemapView']);
+     Route::get('locale/lang', [App\Http\Controllers\LocalizationController::class, 'store'])->name('language.set');
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-    Route::controller(UserController::class)->group(function() {
+    Route::controller(App\Http\Controllers\Admin\UserController::class)->group(function() {
         Route::get('/mysettings', 'index')->name('admin.admin.mysettings')->middleware('auth');
         Route::post('genup', 'genUpdate')->name('admin.users.genupdate')->middleware('auth');
         Route::post('passup', 'updatePassword')->name('admin.users.passup')->middleware('auth');
     });
 
     Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin','user']], function () {
-        Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('dashboard', [App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('dashboard');
 
-        Route::controller(DashboardController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\DashboardController::class)->group(function() {
             Route::get('/dashboard/static', 'staticData');
             Route::get('/dashboard/perfomance/{period}', 'perfomance');
             Route::get('/dashboard/deposit/perfomance/{period}', 'depositPerfomance');
@@ -118,28 +99,28 @@ Route::group(['domain' => env('APP_URL')], function($domain)
             Route::get('/dashboard/visitors/{days}', 'google_analytics');
         });
 
-        Route::resource('cron', CronController::class);
+        Route::resource('cron', App\Http\Controllers\Admin\CronController::class);
 
-        Route::resource('store', StoreController::class);
-        Route::post('stores/destroys', [StoreController::class, 'destroy'])->name('stores.destroys');
+        Route::resource('store', App\Http\Controllers\Admin\StoreController::class);
+        Route::post('stores/destroys', [App\Http\Controllers\Admin\StoreController::class, 'destroy'])->name('stores.destroys');
 
-        Route::resource('domain', DomainController::class);
-        Route::post('domains/destroys', [DomainController::class, 'destroy'])->name('domains.destroys');
+        Route::resource('domain', App\Http\Controllers\Admin\DomainController::class);
+        Route::post('domains/destroys', [App\Http\Controllers\Admin\DomainController::class, 'destroy'])->name('domains.destroys');
 
-        Route::controller(StoreController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\StoreController::class)->group(function() {
             Route::get('domain/edit/database/{id}', 'databaseView')->name('domain.database.edit');
             Route::put('domain/update/database/{id}', 'databaseUpdate')->name('database.update');
             Route::get('domain/edit/plan/{id}', 'planView')->name('domain.plan.edit');
             Route::put('domain/update/plan/{id}', 'planUpdate')->name('domain.plan.update');
         });
 
-        Route::resource('seo', SeoController::class);
-        Route::resource('env', EnvController::class);
-        Route::get('site/settings', [EnvController::class, 'theme_settings'])->name('site.settings');
+        Route::resource('seo', App\Http\Controllers\Admin\SeoController::class);
+        Route::resource('env', App\Http\Controllers\Admin\EnvController::class);
+        Route::get('site/settings', [App\Http\Controllers\Admin\EnvController::class, 'theme_settings'])->name('site.settings');
 
-        Route::resource('plan', PlanController::class);
+        Route::resource('plan', App\Http\Controllers\Admin\PlanController::class);
 
-        Route::controller(PlanController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\PlanController::class)->group(function() {
             Route::post('plans/delete', 'destroy')->name('plans.destroys');
             Route::get('/plan/config/settings','settings')->name('plan.settings');
             Route::put('/plan/config/update/{type}','settingsUpdate')->name('plan.settings.update');
@@ -147,7 +128,7 @@ Route::group(['domain' => env('APP_URL')], function($domain)
 
         //language
         Route::resource('language', 'LanguageController');
-        Route::controller(LanguageController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\LanguageController::class)->group(function() {
             Route::get('languages/delete/{id}', 'destroy')->name('languages.delete');
             Route::post('languages/setActiveLanuguage', 'setActiveLanuguage')->name('languages.active');
             Route::post('languages/add_key', 'add_key')->name('language.add_key');
@@ -155,28 +136,28 @@ Route::group(['domain' => env('APP_URL')], function($domain)
 
         // Menu Route
         Route::resource('menu', 'MenuController');
-        Route::controller(MenuController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\MenuController::class)->group(function() {
             Route::post('/menus/destroy', 'destroy')->name('menus.destroy');
             Route::post('menues/node', 'MenuNodeStore')->name('menus.MenuNodeStore');
         });
 
         //role routes
-        Route::resource('role', 'RoleController');
-        Route::post('roles/destroy', [RoleController::class, 'destroy'])->name('roles.destroy');
+        Route::resource('role', App\Http\Controllers\Admin\RoleController::class);
+        Route::post('roles/destroy', [App\Http\Controllers\Admin\RoleController::class, 'destroy'])->name('roles.destroy');
         // Admin Route
-        Route::resource('admin', 'AdminController');
-        Route::post('/admins/destroy', [AdminController::class, 'destroy'])->name('admins.destroy');
+        Route::resource('admin', App\Http\Controllers\Admin\AdminController::class);
+        Route::post('/admins/destroy', [App\Http\Controllers\Admin\AdminController::class, 'destroy'])->name('admins.destroy');
 
         //Gateway crud controller
-        Route::resource('gateway', PaymentGatewayController::class);
+        Route::resource('gateway', App\Http\Controllers\Admin\PaymentGatewayController::class);
         //Blog crud controller
         Route::resource('blog', App\Http\Controllers\Admin\BlogController::class);
         //Page crud controller
-        Route::resource('page', PageController::class);
+        Route::resource('page', App\Http\Controllers\Admin\PageController::class);
 
-        Route::resource('template', ThemeController::class);
+        Route::resource('template', App\Http\Controllers\Admin\ThemeController::class);
 
-        Route::controller(StoreController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\StoreController::class)->group(function() {
             Route::get('/dns/settings', 'dnsSettingView')->name('dns.settings');
             Route::put('/dns/update', 'dnsUpdate')->name('dns.update');
             Route::get('/developer/instruction', 'instructionView')->name('developer.instruction');
@@ -184,27 +165,29 @@ Route::group(['domain' => env('APP_URL')], function($domain)
         });
 
         //Support Route
-        Route::resource('support', SupportController::class);
+        Route::resource('support', App\Http\Controllers\Admin\SupportController::class);
 
-        Route::controller(SupportController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\SupportController::class)->group(function() {
             Route::post('supportInfo', 'getSupportData')->name('support.info');
             Route::post('supportstatus', 'supportStatus')->name('support.status');
         });
 
         //Option route
-        Route::controller(OptionController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\OptionController::class)->group(function() {
             Route::get('option/edit/{key}', 'edit')->name('option.edit');
             Route::post('option/update/{key}', 'update')->name('option.update');
             Route::get('option/sco-index', 'seoIndex')->name('option.seo-index');
             Route::get('option/seo-edit/{id}', 'seoEdit')->name('option.seo-edit');
             Route::put('option/seo-update/{id}', 'seoUpdate')->name('option.seo-update');
+
+            //Theme settings
+            Route::get('theme/settings', 'settingsEdit')->name('theme.settings');
+            Route::put('theme/settings-update/{id}', 'settingsUpdate')->name('theme.settings.update');
         });
 
-        //Theme settings
-        Route::get('theme/settings', 'OptionController@settingsEdit')->name('theme.settings');
-        Route::put('theme/settings-update/{id}', 'OptionController@settingsUpdate')->name('theme.settings.update');
 
-        Route::controller(ThemesettingsController::class)->group(function() {
+        //Theme settings
+        Route::controller(App\Http\Controllers\Admin\ThemesettingsController::class)->group(function() {
             Route::get('theme/settings/General','general')->name('settings.general');
             Route::post('theme/settings/General','generalupdate')->name('settings.general.update');
             Route::get('theme/settings/services','serviceindex')->name('settings.service.index');
@@ -232,21 +215,21 @@ Route::group(['domain' => env('APP_URL')], function($domain)
         });
 
         //Order Route
-        Route::resource('order', OrderController::class);
+        Route::resource('order', App\Http\Controllers\Admin\OrderController::class);
 
         //merchant crud and mail controller
-        Route::resource('partner', MerchantController::class);
+        Route::resource('partner', App\Http\Controllers\Admin\MerchantController::class);
 
-        Route::controller(MerchantController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\MerchantController::class)->group(function() {
             Route::post('merchant-send-mail/{id}', 'sendMail');
             Route::get('merchant-login/{id}', 'login')->name('merchant.login');
         });
 
 
         //Report Route
-        Route::resource('report', ReportController::class);
+        Route::resource('report', App\Http\Controllers\Admin\ReportController::class);
 
-        Route::controller(ReportController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\ReportController::class)->group(function() {
             Route::get('order-excel', 'excel')->name('order.excel');
             Route::get('order-csv', 'csv')->name('order.csv');
             Route::get('order-pdf', 'pdf')->name('order.pdf');
@@ -254,7 +237,7 @@ Route::group(['domain' => env('APP_URL')], function($domain)
         });
 
         // Fund History Route
-        Route::controller(FundController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Admin\FundController::class)->group(function() {
             Route::get('fund/history','history')->name('fund.history');
             Route::post('fund/approved','approved')->name('fund.approved');
             Route::post('fund/store','store')->name('fund.store');
@@ -264,6 +247,7 @@ Route::group(['domain' => env('APP_URL')], function($domain)
 
 
     Route::group(['prefix' => 'partner', 'as' => 'merchant.', 'namespace' => 'Merchant', 'middleware' => ['auth', 'merchant','user']], function () {
+//        TODO
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
         Route::get('/dashboard-data','DashboardController@staticData');
 
@@ -307,7 +291,7 @@ Route::group(['domain' => env('APP_URL')], function($domain)
         });
 
 
-        Route::resource('plan', 'PlanController');
+        Route::resource('plan', App\Http\Controllers\Merchant\PlanController::class);
 
         Route::controller(App\Http\Controllers\Merchant\PlanController::class)->group(function() {
             Route::get('/domain/renew/{id}','renewView')->name('domain.renew');
@@ -330,15 +314,15 @@ Route::group(['domain' => env('APP_URL')], function($domain)
         });
 
         //Support Route
-        Route::resource('support', SupportController::class);
+        Route::resource('support', App\Http\Controllers\Merchant\SupportController::class);
 
         //Report Route
-        Route::resource('report', ReportController::class);
+        Route::resource('report', App\Http\Controllers\Merchant\ReportController::class);
 
         // Fund Route
-        Route::resource('fund', FundController::class);
+        Route::resource('fund', App\Http\Controllers\Merchant\FundController::class);
 
-        Route::controller(FundController::class)->group(function() {
+        Route::controller(App\Http\Controllers\Merchant\FundController::class)->group(function() {
             Route::get('fund/payment/select','payment')->name('fund.payment');
             Route::post('fund/deposit','deposit')->name('fund.deposit');
             Route::get('fund/history/list','history')->name('fund.history');
@@ -346,11 +330,11 @@ Route::group(['domain' => env('APP_URL')], function($domain)
             Route::get('fund/redirect/fail', 'fail')->name('fund.fail');
         });
 
-        Route::get('plan-renew/redirect/success', [PlanController::class, 'renewSuccess']);
-        Route::get('plan-renew/redirect/fail', [PlanController::class, 'renewFail']);
+        Route::get('plan-renew/redirect/success', [App\Http\Controllers\Merchant\PlanController::class, 'renewSuccess']);
+        Route::get('plan-renew/redirect/fail', [App\Http\Controllers\Merchant\PlanController::class, 'renewFail']);
 
         // Lock Store
-        Route::get('store/lock/{id}', [PlanController::class, 'lock'])->name('store.lock');
+        Route::get('store/lock/{id}', [App\Http\Controllers\Merchant\PlanController::class, 'lock'])->name('store.lock');
 
         // Order Routes
         Route::get('order', [App\Http\Controllers\Merchant\OrderController::class, 'index'])->name('order.index');
@@ -384,36 +368,41 @@ Route::group(['as' => 'seller.', 'prefix' => 'seller', 'namespace' => 'Seller', 
         //End
     });
 
-    Route::resource('category', CategoryController::class);
-    Route::resource('brand', BrandController::class);
-    Route::resource('tag', TagController::class);
-    Route::resource('orderstatus', OrderstatusController::class);
-    Route::resource('coupon', CouponController::class);
+    Route::resource('category', App\Http\Controllers\Seller\CategoryController::class);
+    Route::resource('brand', App\Http\Controllers\Seller\BrandController::class);
+    Route::resource('tag', App\Http\Controllers\Seller\TagController::class);
+    Route::resource('orderstatus', App\Http\Controllers\Seller\OrderstatusController::class);
+    Route::resource('coupon', App\Http\Controllers\Seller\CouponController::class);
     // Commented by mutaman because controller not found
     // Route::resource('tax', TaxController::class);
-    Route::resource('location', LocationController::class);
-    Route::resource('shipping', ShippingController::class);
-    Route::resource('features', FeaturesController::class);
-    Route::resource('product', ProductController::class);
-    Route::post('product-import', [ProductController::class, 'import'])->name('product.import');
-    Route::get('product/edit/{id}/{type}', [ProductController::class, 'edit']);
-    Route::post('products/destroys', [ProductController::class, 'multiDelete'])->name('products.destroys');
-    Route::resource('attribute', AttributeController::class);
-    Route::resource('media', MediaController::class);
-    Route::resource('mediacompress', ImagecompressController::class);
-    Route::resource('table', TableController::class);
-    Route::resource('barcode', BarcodeController::class);
-    Route::get('barcodes/reset', [BarcodeController::class, 'reset'])->name('barcode.reset');
+    Route::resource('location', App\Http\Controllers\Seller\LocationController::class);
+    Route::resource('shipping', App\Http\Controllers\Seller\ShippingController::class);
+    Route::resource('features', App\Http\Controllers\Seller\FeaturesController::class);
+
+    Route::resource('product', App\Http\Controllers\Seller\ProductController::class);
+    Route::post('product-import', [App\Http\Controllers\Seller\ProductController::class, 'import'])->name('product.import');
+    Route::get('product/edit/{id}/{type}', [App\Http\Controllers\Seller\ProductController::class, 'edit']);
+    Route::post('products/destroys', [App\Http\Controllers\Seller\ProductController::class, 'multiDelete'])->name('products.destroys');
+
+    Route::resource('attribute', App\Http\Controllers\Seller\AttributeController::class);
+    Route::resource('media', App\Http\Controllers\Seller\MediaController::class);
+    Route::resource('mediacompress', App\Http\Controllers\Seller\ImagecompressController::class);
+    Route::resource('table', App\Http\Controllers\Seller\TableController::class);
+
+    Route::resource('barcode', App\Http\Controllers\Seller\BarcodeController::class);
+    Route::get('barcodes/reset', [App\Http\Controllers\Seller\BarcodeController::class, 'reset'])->name('barcode.reset');
+
     Route::resource('user', App\Http\Controllers\Seller\UserController::class);
     Route::get('/user/login/{id}', [App\Http\Controllers\Seller\UserController::class, 'login'])->name('user.login');
-    Route::resource('rider', RiderController::class);
-    Route::get('settings', [SettingsController::class, 'index']);
-    Route::post('settings/update', [SettingsController::class, 'update'])->name('settings.update');
-    Route::get('medias', [MedialistController::class, 'index']);
-    Route::post('media/delete', [MedialistController::class, 'delete'])->name('medias.delete');
-    Route::get('media/create', [MedialistController::class, 'create'])->name('medias.create');
 
-    Route::controller(PaymentgatewayController::class)->group(function() {
+    Route::resource('rider', App\Http\Controllers\Seller\RiderController::class);
+    Route::get('settings', [App\Http\Controllers\Seller\SettingsController::class, 'index']);
+    Route::post('settings/update', [App\Http\Controllers\Seller\SettingsController::class, 'update'])->name('settings.update');
+    Route::get('medias', [App\Http\Controllers\Seller\MedialistController::class, 'index']);
+    Route::post('media/delete', [App\Http\Controllers\Seller\MedialistController::class, 'delete'])->name('medias.delete');
+    Route::get('media/create', [App\Http\Controllers\Seller\MedialistController::class, 'create'])->name('medias.create');
+
+    Route::controller(App\Http\Controllers\Seller\PaymentgatewayController::class)->group(function() {
         Route::get('payment/gateway','index')->name('payment.gateway');
         Route::post('payment/custom/gateway','custom_payment')->name('custom.payment');
         Route::get('payment/custom/gateway/create','custom_payment_create')->name('custom.payment.create');
@@ -423,11 +412,13 @@ Route::group(['as' => 'seller.', 'prefix' => 'seller', 'namespace' => 'Seller', 
         Route::get('payment/uninstall/{payment}','uninstall')->name('payment.uninstall');
     });
 
-    Route::get('theme','ThemeController@index')->name('theme.index');
-    Route::get('theme/install/{theme}','ThemeController@install')->name('theme.install');
+    Route::controller(App\Http\Controllers\Seller\ThemeController::class)->group(function() {
+        Route::get('theme','index')->name('theme.index');
+        Route::get('theme/install/{theme}','install')->name('theme.install');
+    });
 
-    Route::resource('language', LanguageController::class);
-    Route::controller(LanguageController::class)->group(function() {
+    Route::resource('language', App\Http\Controllers\Seller\LanguageController::class);
+    Route::controller(App\Http\Controllers\Seller\LanguageController::class)->group(function() {
         Route::post('language-addkey/{id}','addKey')->name('language.addkey');
         Route::delete('language-remove-key/{id}','keyRemove')->name('language.keyremove');
     });
@@ -443,7 +434,7 @@ Route::group(['as' => 'seller.', 'prefix' => 'seller', 'namespace' => 'Seller', 
     Route::post('review/destroy', [App\Http\Controllers\Seller\ReviewController::class, 'destroy'])->name('review.destroy');
 
     //pos routes
-    Route::resource('pos', 'PosController');
+    Route::resource('pos', App\Http\Controllers\Seller\PosController::class);
     Route::controller(App\Http\Controllers\Seller\PosController::class)->group(function() {
         Route::get('products','productList')->name('product.json');
         Route::post('add-to-cart','addtocart')->name('add.tocart');
@@ -463,19 +454,19 @@ Route::group(['as' => 'seller.', 'prefix' => 'seller', 'namespace' => 'Seller', 
         Route::get('order/print/{id}','print')->name('order.print');
     });
 
-    Route::resource('notification', FirebaseController::class);
-    Route::controller(FirebaseController::class)->group(function() {
+    Route::resource('notification', App\Http\Controllers\Seller\FirebaseController::class);
+    Route::controller(App\Http\Controllers\Seller\FirebaseController::class)->group(function() {
         Route::post('/save-token', 'saveToken')->name('save-token');
         Route::post('/send-notification',  'sendNotification')->name('send.notification');
         Route::post('notifications/destroy','destroy')->name('notification.destroys');
     });
 
-    Route::resource('site-settings', SitesettingsController::class);
-    Route::resource('google-analytics', GoogleanalyticsController::class);
+    Route::resource('site-settings', App\Http\Controllers\Seller\SitesettingsController::class);
+    Route::resource('google-analytics', App\Http\Controllers\Seller\GoogleanalyticsController::class);
 
     // Menu Route
-    Route::resource('menu', MenuController::class);
-    Route::controller(MenuController::class)->group(function() {
+    Route::resource('menu', App\Http\Controllers\Seller\MenuController::class);
+    Route::controller(App\Http\Controllers\Seller\MenuController::class)->group(function() {
         Route::post('/menus/destroy', 'destroy')->name('menus.destroy');
         Route::post('menues/node', 'MenuNodeStore')->name('menus.MenuNodeStore');
     });
@@ -524,7 +515,7 @@ Route::group(['prefix'=>'rider', 'as' => 'rider.', 'namespace' => 'Rider','middl
         Route::get('settings', 'index')->name('settings.index');
         Route::post('settings', 'update')->name('settings.update');
     });
-  
+
     Route::controller(App\Http\Controllers\Rider\OrderController::class)->group(function() {
         Route::get('order', 'index')->name('order.index');
         Route::get('order/{id}', 'show')->name('order.show');

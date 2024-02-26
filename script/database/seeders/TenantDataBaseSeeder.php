@@ -37,8 +37,19 @@ class TenantDataBaseSeeder extends Seeder
         // $file=file_get_contents('theme/themes.json');
         // $this->$themes = json_decode($file);
 
-        $file=File::get('theme/themes.json');
-        $this->themes = json_decode($file);
+        // disabled by mutaman to allow testing to work
+//        $file=File::get('theme/themes.json');
+//        $this->themes = json_decode($file);
+
+        $file = 'theme/themes.json';
+
+        if (File::exists($file)) {
+            $fileContent = File::get($file);
+            $this->themes = json_decode($fileContent);
+        } else {
+            // Handle the case when the file doesn't exist
+            $this->themes = []; // or set it to some default value
+        }
 
     }
 

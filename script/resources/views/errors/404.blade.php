@@ -46,11 +46,11 @@
                   </div>
                 </div>
               </form> --}}
-                <a href="{{ url(env('APP_URL')) }}">
-                    <button class="btn btn-primary btn-lg">
-                        {{ __('Back to Home') }}
-                    </button>
-                </a>
+{{--                <a href="{{ url(env('APP_URL')) }}">--}}
+{{--                    <button class="btn btn-primary btn-lg">--}}
+{{--                        {{ __('Back to Home') }}--}}
+{{--                    </button>--}}
+{{--                </a>--}}
             </div>
           </div>
         </div>

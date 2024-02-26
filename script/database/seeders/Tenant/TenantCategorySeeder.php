@@ -399,25 +399,6 @@ class TenantCategorySeeder extends Seeder
         //     Categorymeta::insert($special_menu_preview);
         // }
 
-        function generateBanners($count, $bannerType, $bannerWidth, $bannerLocation) {
-            $banners = [];
-
-            for ($i = 1; $i <= $count; $i++) {
-                // $name = $faker->unique()->sentence();
-                $banners[] = [
-                    "name" => 'Banner',
-                    'slug' => '{"link":"#","button_text":"Order Now","banner_width":"' . $bannerWidth . '","banner_location":"' . $bannerLocation . '"}',
-                    "type" => $bannerType,
-                    "category_id" => NULL,
-                    "featured" => 0,
-                    'menu_status' => 0,
-                    "status" => 1,
-                    "created_at" => now()->toDateTimeString(),
-                    "updated_at" => now()->toDateTimeString(),
-                ];
-            }
-            return $banners;
-        }
         $short_banner = generateBanners(3, 'short_banner', '33.33', 'latest_products');
         $large_banner = generateBanners(2, 'large_banner', '50', 'top_rated_products');
 

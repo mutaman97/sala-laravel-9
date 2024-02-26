@@ -16,24 +16,24 @@ class UsertableSeeder extends Seeder
      */
     public function run()
     {
-        
-       
+
+
         $super = User::create([
     		'role_id' => 1,
     		'name' => 'Admin',
     		'email' => 'admin@admin.com',
-    		'password' => Hash::make('rootadmin'),
+    		'password' => Hash::make('@O999o19o12'),
 		]);
 
         User::create([
     		'role_id' => 2,
     		'name' => 'Merchant',
     		'email' => 'merchant@gmail.com',
-    		'password' => Hash::make('rootmerchant')
-		]);	
+    		'password' => Hash::make('@O999o19o12')
+		]);
 
-		
-		
+
+
     	$roleSuperAdmin = Role::create(['name' => 'superadmin']);
         //create permission
     	$permissions = [
@@ -108,7 +108,7 @@ class UsertableSeeder extends Seeder
                     'title',
                 ]
 			],
-			
+
             [
 				'group_name' => 'Blog',
 				'permissions' => [
@@ -141,7 +141,7 @@ class UsertableSeeder extends Seeder
 				'group_name' => 'report',
 				'permissions' => [
 					'report',
-					
+
 				]
 			],
 
@@ -158,7 +158,7 @@ class UsertableSeeder extends Seeder
 					'support',
 				]
 			],
-			
+
 			[
 				'group_name' => 'Settings',
 				'permissions' => [
@@ -169,7 +169,7 @@ class UsertableSeeder extends Seeder
 				]
 			],
 
-			
+
 			[
 				'group_name' => 'users',
 				'permissions' => [
@@ -185,7 +185,7 @@ class UsertableSeeder extends Seeder
 					'user.invoice',
 				]
 			],
-			
+
 			[
 				'group_name' => 'language',
 				'permissions' => [
@@ -226,8 +226,8 @@ class UsertableSeeder extends Seeder
                     'merchant.mail',
                 ]
             ],
-			
-			
+
+
 
 
     	];

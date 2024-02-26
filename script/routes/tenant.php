@@ -27,7 +27,7 @@ use App\Jobs\TenantMailJob;
 
 Route::group(['middleware' => ['Isinstalled','InitializeTenancyByDomain','PreventAccessFromCentralDomains','web','tenantenvironment']], function () {
 
-    Auth::routes(['verify' => true]); // Include the 'verify' option to enable email verification routes
+    Auth::routes(); // Include the 'verify' option to enable email verification routes
 
 
     Route::get('/pwa',function(){

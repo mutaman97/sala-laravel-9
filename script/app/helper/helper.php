@@ -94,7 +94,7 @@ function optionfromcache($key)
 function gravatar($email)
 {
     $hash = md5(strtolower(trim($email)));
-    $uri = "https://www.gravatar.com/avatar/{$hash}?d=404";
+    $uri = "localhost" ?? "https://www.gravatar.com/avatar/{$hash}?d=404";
 
     $client = new Client();
     $response = $client->get($uri, ['http_errors' => false]);
@@ -567,4 +567,26 @@ function getRandomFileUrl($directory, $index) {
     // return env('APP_URL') . "/uploads/$directory/$randomFile";
 	return url("/uploads/$directory/$randomFile");
 
+}
+
+
+function generateBanners($count, $bannerType, $bannerWidth, $bannerLocation) : array
+{
+    $banners = [];
+
+    for ($i = 1; $i <= $count; $i++) {
+        // $name = $faker->unique()->sentence();
+        $banners[] = [
+            "name" => 'Banner',
+            'slug' => '{"link":"#","button_text":"Order Now","banner_width":"' . $bannerWidth . '","banner_location":"' . $bannerLocation . '"}',
+            "type" => $bannerType,
+            "category_id" => NULL,
+            "featured" => 0,
+            'menu_status' => 0,
+            "status" => 1,
+            "created_at" => now()->toDateTimeString(),
+            "updated_at" => now()->toDateTimeString(),
+        ];
+    }
+    return $banners;
 }

@@ -1,0 +1,1 @@
+{"version":1,"defects":[],"times":{"Tests\\Feature\\App\\Http\\Controllers\\Seller\\DashboardTest::test__authenticated_merchant_can_access_the_dashboard_page":7.849,"Tests\\Feature\\ExampleTest::testBasicTest":0.601}}

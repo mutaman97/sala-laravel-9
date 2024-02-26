@@ -17,9 +17,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->isLocal()) {
-            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
-        }
+//        TODO - Package removed by mutaman
+//        if ($this->app->isLocal()) {
+//            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+//        }
         // ...
     }
 
@@ -35,10 +36,10 @@ class AppServiceProvider extends ServiceProvider
     // Model::preventLazyLoading(!app()->isProduction());
     // end
 
-    DB::whenQueryingForLongerThan(500, function (Connection $connection) {
-        Log::warning("Database queries exceeded 5 seconds on {$connection->getName()}");
+    // DB::whenQueryingForLongerThan(500, function (Connection $connection) {
+    // Log::warning("Database queries exceeded 5 seconds on {$connection->getName()}");
 
         // or notify the development team...
-    });
+    // });
     }
 }

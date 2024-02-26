@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -46,7 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public static  $seller_roles=['dashboard',
+    public static array  $seller_roles =['dashboard',
             'pos',
             'order',
             'calender',
@@ -94,34 +97,36 @@ class User extends Authenticatable implements MustVerifyEmail
         return $hasPermission;
     }
 
-    public function active_orders(){
+    public function active_orders() : HasMany
+    {
         return $this->hasMany('App\Models\Order','user_id', 'id')->where('status', 1);
     }
 
-    public function orders(){
+    public function orders() : HasMany
+    {
         return $this->hasMany('App\Models\Order','user_id', 'id');
     }
 
-    public function tenant()
+    public function tenant() : HasMany
     {
         return $this->hasMany('App\Models\Tenant');
     }
-    public function supports()
+    public function supports() : HasMany
     {
         return $this->hasMany('App\Models\Support');
     }
 
-    public function fmctoken()
+    public function fmctoken() : HasOne
     {
        return $this->hasOne('App\Models\Devicetoken')->where('type','firebase');
     }
 
-    public function rider_orders()
+    public function rider_orders() : HasMany
     {
         return $this->hasMany('App\Models\Ordershipping','user_id')->with('order');
     }
 
-    public function order()
+    public function order() : BelongsTo
     {
         return $this->belongsTo('App\Models\Order','order_id');
     }
@@ -141,7 +146,7 @@ class User extends Authenticatable implements MustVerifyEmail
     //     return $this->belongsTo('App\Models\Order','order_id')->where('status_id',3);
     // }
 
-    public function user_orders()
+    public function user_orders() : HasMany
     {
         return $this->hasMany('App\Models\Order')->with('orderstatus');
     }

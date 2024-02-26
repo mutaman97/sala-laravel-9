@@ -62,24 +62,24 @@ class UserController extends Controller
     public function updatePassword(Request $request)
     {
         $validatedData = $request->validate([
-            'oldpassword' => ['required'],
+            'current' => ['required'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
 
         ]);
-        $info=User::where('id',Auth::id())->first();
+        $user=User::where('id',Auth::id())->first();
 
-        $check=Hash::check($request->current, auth()->user()->password);
+        $check=Hash::check($request->current, $user->password);
 
         if ($check==true) {
             User::where('id',Auth::id())->update(['password'=>Hash::make($request->password)]);
 
-            return response()->json(['Password Changed']);
+            return response()->json([__('Password Changed Successfully')]);
 
         }
         else{
 
           return Response()->json(array(
-            'message'   =>  "Enter Valid Password"
+            'message'   =>  __('Enter a Valid Password')
         ), 401);
 
       }
